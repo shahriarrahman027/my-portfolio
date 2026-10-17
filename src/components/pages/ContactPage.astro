@@ -1,0 +1,129 @@
+---
+import type { Locale } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { ContactForm } from '@/components/ContactForm';
+import { getProfile } from '@/lib/content';
+import { getTranslations } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const profile = getProfile();
+---
+
+<BaseLayout
+  title={t.nav.contact}
+  description={locale === 'bn' ? 'শাহরিয়ার রহমানের সাথে যোগাযোগ করুন—গবেষণা, প্রযুক্তি বা সাহিত্য আলোচনা' : 'Get in touch with Shahriar Rahman for research, technology projects, or literary discussions.'}
+  locale={locale}
+>
+  <div class="container-narrow contact-page">
+    <header class="page-header">
+      <span class="eyebrow">{locale === 'bn' ? 'সরাসরি যোগাযোগ' : 'Direct Conversation'}</span>
+      <h1 class="page-title">{locale === 'bn' ? 'যোগাযোগ করুন' : 'Get in Touch'}</h1>
+      <p class="editorial-lead">
+        {locale === 'bn'
+          ? 'নতুন গবেষণা, প্রযুক্তিগত সমাধান, যৌথ সাহিত্যকর্ম বা যেকোনো বিষয়ে কথা বলতে লিখুন।'
+          : 'Whether you want to discuss AI research, technology architecture, creative writing, or simply connect, feel free to send a note.'}
+      </p>
+    </header>
+
+    <div class="contact-grid">
+      <div class="contact-info-col">
+        <h2 class="contact-info-title">{locale === 'bn' ? 'সরাসরি যোগাযোগের ঠিকানা' : 'Direct Channels'}</h2>
+        
+        <div class="info-block">
+          <span class="info-label">{locale === 'bn' ? 'ইমেইল' : 'Email'}</span>
+          <a href={`mailto:${profile.email}`} class="info-value email-link">
+            {profile.email} ↗
+          </a>
+        </div>
+
+        <div class="info-block">
+          <span class="info-label">{locale === 'bn' ? 'অবস্থান' : 'Location'}</span>
+          <span class="info-value">{profile.location[locale] || profile.location.en}</span>
+        </div>
+
+        <div class="info-block">
+          <span class="info-label">{locale === 'bn' ? 'প্রাতিষ্ঠানিক সংযুক্তি' : 'Affiliation'}</span>
+          <span class="info-value">{profile.university[locale] || profile.university.en}</span>
+          <span class="info-value">{profile.synitysoftRole[locale] || profile.synitysoftRole.en}</span>
+        </div>
+
+        <div class="info-block">
+          <span class="info-label">{locale === 'bn' ? 'ওপেন সোর্স কোড' : 'Code'}</span>
+          <a href={`https://github.com/${profile.githubUsername || 'shahriar-rahman'}`} target="_blank" rel="noopener noreferrer" class="info-value">
+            github.com/{profile.githubUsername || 'shahriar-rahman'} ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form-col">
+        <ContactForm client:load locale={locale} />
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    padding: var(--space-16) 0 var(--space-24);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-16);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-8);
+  }
+
+  .page-title {
+    font-size: var(--text-4xl);
+    margin-top: var(--space-2);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-12);
+  }
+
+  .contact-info-col {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .contact-info-title {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+  }
+
+  .info-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .info-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .info-value {
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+  }
+
+  .email-link {
+    color: var(--accent-primary);
+    font-weight: 500;
+  }
+</style>

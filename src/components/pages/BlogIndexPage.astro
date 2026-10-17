@@ -1,0 +1,235 @@
+---
+import type { Locale, BlogPost } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EmptyState from '@/components/EmptyState.astro';
+import { getBlogPosts } from '@/lib/content';
+import { getTranslations } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const posts = getBlogPosts(locale, false);
+
+const categories: BlogPost['category'][] = [
+  'tech-ai',
+  'books-literature',
+  'films-storytelling',
+];
+---
+
+<BaseLayout
+  title={t.nav.blog}
+  description={locale === 'bn' ? 'প্রযুক্তি, এআই, বই ও সিনেমা নিয়ে শাহরিয়ার রহমানের ব্লগ' : 'Essays and articles on technology, artificial intelligence, literature, and cinema.'}
+  locale={locale}
+>
+  <div class="container-narrow blog-index-page">
+    <header class="page-header">
+      <span class="eyebrow">{locale === 'bn' ? 'প্রবন্ধ ও বিশ্লেষণ' : 'Reflections & Criticism'}</span>
+      <h1 class="page-title">{locale === 'bn' ? 'ব্লগ ও প্রকাশনা' : 'Blog & Publishing'}</h1>
+      <p class="editorial-lead">
+        {locale === 'bn'
+          ? 'কৃত্রিম বুদ্ধিমত্তা, বিশ্বসাহিত্য, ক্লাসিক সিনেমা এবং আধুনিক প্রযুক্তির সামাজিক প্রভাব নিয়ে বিশ্লেষণ ও চিন্তা।'
+          : 'Articles on artificial intelligence, computing architectures, literary explorations, and cinematic narratives.'}
+      </p>
+
+      <div class="category-pills">
+        <span class="pill-label">{t.labels.category}:</span>
+        <button type="button" class="category-pill active" data-category="all">
+          {t.actions.filterAll}
+        </button>
+        {categories.map((cat) => (
+          <button type="button" class="category-pill" data-category={cat}>
+            {t.blogCategories[cat] || cat}
+          </button>
+        ))}
+      </div>
+    </header>
+
+    {posts.length === 0 ? (
+      <EmptyState
+        icon="book"
+        title={locale === 'bn' ? 'এখনও কোনো ব্লগ পোস্ট প্রকাশিত হয়নি' : 'No blog posts published yet'}
+        description={locale === 'bn' ? 'প্রযুক্তি ও সাহিত্য বিষয়ক বিশ্লেষণমূলক প্রবন্ধ প্রস্তুত হলে এখানে প্রকাশিত হবে।' : 'Critical essays and reflections on technology, literature, and cinema will be published here.'}
+      />
+    ) : (
+      <div class="blog-list">
+        {posts.map((post) => (
+          <article class="blog-entry" data-category={post.category}>
+            <div class="blog-meta">
+              <span class="tag">{t.blogCategories[post.category] || post.category}</span>
+              {post.readingTimeMinutes && (
+                <span class="reading-time">
+                  {post.readingTimeMinutes} {t.labels.readingTime}
+                </span>
+              )}
+            </div>
+
+            <h2 class="blog-title">
+              <a href={`/${locale}/blog/${post.slug}`}>{post.title}</a>
+            </h2>
+
+            <p class="blog-summary">{post.summary}</p>
+
+            <div class="blog-footer">
+              <span class="blog-date">
+                {new Date(post.createdAt).toLocaleDateString(locale === 'bn' ? 'bn-BD' : 'en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
+              <a href={`/${locale}/blog/${post.slug}`} class="read-link">
+                {t.actions.readMore} →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-index-page {
+    padding: var(--space-16) 0 var(--space-24);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-16);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-8);
+  }
+
+  .page-title {
+    font-size: var(--text-4xl);
+    margin-top: var(--space-2);
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+  }
+
+  .pill-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .category-pill {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 3px 8px;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .category-pill:hover, .category-pill.active {
+    background: var(--accent-subtle);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  .blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .blog-entry {
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-12);
+  }
+
+  .blog-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .reading-time {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .blog-title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .blog-title a {
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .blog-title a:hover {
+    color: var(--accent-primary);
+  }
+
+  .blog-summary {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  .blog-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+  }
+
+  .blog-date {
+    color: var(--text-muted);
+  }
+
+  .read-link {
+    color: var(--accent-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .read-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  function setupBlogCategoryFilter() {
+    const pills = document.querySelectorAll<HTMLButtonElement>('.category-pill');
+    const entries = document.querySelectorAll<HTMLElement>('.blog-entry');
+
+    pills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        pills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        const selected = pill.dataset.category;
+
+        entries.forEach((entry) => {
+          if (selected === 'all' || entry.dataset.category === selected) {
+            entry.style.display = 'block';
+          } else {
+            entry.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  setupBlogCategoryFilter();
+  document.addEventListener('astro:after-swap', setupBlogCategoryFilter);
+</script>

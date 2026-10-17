@@ -1,0 +1,647 @@
+---
+import type { Locale } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EmptyState from '@/components/EmptyState.astro';
+import { getProfile, getProjects, getWritings, getBlogPosts, getPhotographs, getNow, getTimeline } from '@/lib/content';
+import { getTranslations } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const profile = getProfile();
+const projects = getProjects(false).slice(0, 3);
+const writings = getWritings(locale, false).slice(0, 3);
+const blogPosts = getBlogPosts(locale, false).slice(0, 3);
+const photos = getPhotographs(false).slice(0, 4);
+const now = getNow();
+const timeline = getTimeline(false).slice(0, 3);
+---
+
+<BaseLayout
+  title={locale === 'bn' ? 'নীড়পাতা' : 'Home'}
+  description={profile.bio[locale] || profile.bio.en}
+  locale={locale}
+>
+  <!-- SECTION 1: OPENING / HERO -->
+  <section class="hero-section">
+    <div class="container-wide hero-grid">
+      <div class="hero-content">
+        <span class="eyebrow">{locale === 'bn' ? 'ব্যক্তিগত প্ল্যাটফর্ম ও আর্কাইভ' : 'Personal Platform & Archive'}</span>
+        <h1 class="hero-title">{t.siteTitle}</h1>
+        <p class="hero-role">{profile.titles[locale] || profile.titles.en}</p>
+
+        <p class="hero-intro">
+          {profile.longBio[locale] || profile.longBio.en}
+        </p>
+
+        <div class="hero-actions">
+          <a href={`/${locale}/about`} class="btn btn-primary">
+            {locale === 'bn' ? 'আমার গল্প ও পরিচয়' : 'About My Journey'}
+          </a>
+          <a href={`/${locale}/technology`} class="btn">
+            {locale === 'bn' ? 'প্রযুক্তি প্রজেক্ট' : 'Technology & Code'}
+          </a>
+          <a href={`/${locale}/writing`} class="btn">
+            {locale === 'bn' ? 'লেখালেখি অন্বেষণ' : 'Read My Writing'}
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-portrait-col">
+        <div class="portrait-frame">
+          <div class="portrait-placeholder">
+            <span class="portrait-monogram">SR</span>
+            <span class="portrait-caption">
+              {profile.university[locale] || profile.university.en}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: A GLIMPSE OF MY WORLD -->
+  <section class="section glimpse-section">
+    <div class="container-wide">
+      <div class="section-header">
+        <span class="eyebrow">{t.sections.glimpse}</span>
+        <h2 class="section-title">{t.sections.glimpseDesc}</h2>
+      </div>
+
+      <div class="glimpse-grid">
+        <a href={`/${locale}/technology`} class="glimpse-card tech-card">
+          <div class="glimpse-card-inner">
+            <span class="glimpse-number">01</span>
+            <h3 class="glimpse-heading">{locale === 'bn' ? 'কম্পিউটার বিজ্ঞান ও এআই' : 'Computing & Artificial Intelligence'}</h3>
+            <p class="glimpse-text">
+              {locale === 'bn'
+                ? 'মেশিন লার্নিং, এনএলপি, এলএলএম এবং সফটওয়্যার ইঞ্জিনিয়ারিং—সমস্যা সমাধান ও বৈজ্ঞানিক কৌতূহল।'
+                : 'Machine learning, natural language processing, LLMs, and backend software engineering driven by curiosity.'}
+            </p>
+            <span class="glimpse-link-text">{locale === 'bn' ? 'প্রজেক্ট ও প্রযুক্তি দেখুন →' : 'Explore Technology →'}</span>
+          </div>
+        </a>
+
+        <a href={`/${locale}/writing`} class="glimpse-card writing-card">
+          <div class="glimpse-card-inner">
+            <span class="glimpse-number">02</span>
+            <h3 class="glimpse-heading">{locale === 'bn' ? 'কথাসাহিত্য ও প্রবন্ধ' : 'Literature & Creative Writing'}</h3>
+            <p class="glimpse-text">
+              {locale === 'bn'
+                ? 'ছোটগল্প, উপন্যাস, কবিতা এবং মানবিক অভিজ্ঞতা ও সমাজ নিয়ে মননশীল প্রবন্ধ রচনা।'
+                : 'Short stories, novel manuscripts, poetry, and personal essays exploring human consciousness and solitude.'}
+            </p>
+            <span class="glimpse-link-text">{locale === 'bn' ? 'লেখালেখি লাইব্রেরি →' : 'Browse Writing →'}</span>
+          </div>
+        </a>
+
+        <a href={`/${locale}/photography`} class="glimpse-card photo-card">
+          <div class="glimpse-card-inner">
+            <span class="glimpse-number">03</span>
+            <h3 class="glimpse-heading">{locale === 'bn' ? 'ফটোগ্রাফি ও ভিজ্যুয়াল জার্নাল' : 'Photography & Visual Journal'}</h3>
+            <p class="glimpse-text">
+              {locale === 'bn'
+                ? 'আলো, ছায়া, নগরীর জ্যামিতি এবং দৈনন্দিন জীবনের অঘোষিত গল্প ফ্রেমবন্দি করা।'
+                : 'Observational street moments, geometric framing, and documentary visual storytelling.'}
+            </p>
+            <span class="glimpse-link-text">{locale === 'bn' ? 'ফটোগ্রাফি গ্যালারি →' : 'View Visual Journal →'}</span>
+          </div>
+        </a>
+
+        <a href={`/${locale}/now`} class="glimpse-card now-card">
+          <div class="glimpse-card-inner">
+            <span class="glimpse-number">04</span>
+            <h3 class="glimpse-heading">{locale === 'bn' ? 'বর্তমান মনোযোগ ও লক্ষ্য' : 'Current Focus & Long-term Ambition'}</h3>
+            <p class="glimpse-text">
+              {locale === 'bn'
+                ? 'বিশ্ববিদ্যালয় অধ্যয়ন, এআই গবেষণা প্রস্তুতি এবং সিনিটিসফট (SynitySoft)-এর নেতৃত্ব।'
+                : 'Active undergraduate studies, research foundations, and leadership at SynitySoft.'}
+            </p>
+            <span class="glimpse-link-text">{locale === 'bn' ? 'বর্তমান অবস্থা জানুন →' : 'Read Now Page →'}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: SELECTED WORK -->
+  <section class="section projects-section">
+    <div class="container-wide">
+      <div class="section-header-split">
+        <div>
+          <span class="eyebrow">{t.sections.selectedWork}</span>
+          <h2 class="section-title">{locale === 'bn' ? 'বাস্তব প্রজেক্ট ও কারিগরি অবদান' : 'Engineering & Research Projects'}</h2>
+        </div>
+        <a href={`/${locale}/technology`} class="btn">{t.actions.viewAll}</a>
+      </div>
+
+      {projects.length === 0 ? (
+        <EmptyState
+          icon="code"
+          title={t.labels.emptyTitle}
+          description={locale === 'bn' ? 'প্রজেক্টসমূহের সম্পূর্ণ কেস স্টাডি ও সোর্স কোড দ্রুত প্রকাশিত হবে।' : 'Technical case studies and repositories will appear here once published.'}
+        />
+      ) : (
+        <div class="projects-grid">
+          {projects.map((p) => (
+            <article class="editorial-card project-card">
+              <span class="tag">{p.status}</span>
+              <h3 class="project-title">{p.title[locale] || p.title.en}</h3>
+              <p class="project-summary">{p.summary[locale] || p.summary.en}</p>
+              <div class="project-tech-tags">
+                {p.technologies.map((tech) => (
+                  <span class="tag">{tech}</span>
+                ))}
+              </div>
+              <a href={`/${locale}/technology#${p.slug}`} class="btn btn-primary" style="margin-top: 1rem;">
+                {t.actions.viewDetails} →
+              </a>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- SECTION 4: SELECTED WRITING -->
+  <section class="section writing-section">
+    <div class="container-wide">
+      <div class="section-header-split">
+        <div>
+          <span class="eyebrow">{t.sections.writing}</span>
+          <h2 class="section-title">{locale === 'bn' ? 'গল্প, প্রবন্ধ ও সাহিত্য' : 'Stories, Essays & Reflections'}</h2>
+        </div>
+        <a href={`/${locale}/writing`} class="btn">{t.actions.exploreWriting}</a>
+      </div>
+
+      {writings.length === 0 ? (
+        <EmptyState
+          icon="book"
+          title={t.labels.emptyTitle}
+          description={locale === 'bn' ? 'নির্বাচিত গল্প ও প্রবন্ধ লেখার প্রক্রিয়া চলছে। শীঘ্রই প্রকাশিত হবে।' : 'Original short stories, novel excerpts, and essays will appear here once published.'}
+        />
+      ) : (
+        <div class="writing-grid">
+          {writings.map((w) => (
+            <article class="editorial-card writing-card-item">
+              <span class="eyebrow">{w.category}</span>
+              <h3 class="writing-title">
+                <a href={`/${locale}/writing/${w.slug}`}>{w.title}</a>
+              </h3>
+              <p class="writing-summary">{w.summary}</p>
+              <a href={`/${locale}/writing/${w.slug}`} class="btn-text">
+                {t.actions.readMore} →
+              </a>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- SECTION 5: PHOTOGRAPHY -->
+  <section class="section photo-preview-section">
+    <div class="container-wide">
+      <div class="section-header-split">
+        <div>
+          <span class="eyebrow">{t.sections.photography}</span>
+          <h2 class="section-title">{locale === 'bn' ? 'লেন্সে দেখা পৃথিবী' : 'Through The Lens'}</h2>
+        </div>
+        <a href={`/${locale}/photography`} class="btn">{t.actions.viewGallery}</a>
+      </div>
+
+      {photos.length === 0 ? (
+        <EmptyState
+          icon="camera"
+          title={t.labels.emptyTitle}
+          description={locale === 'bn' ? 'আমার তোলা অরিজিনাল ফটোগ্রাফিসমূহ গ্যালারিতে আপলোড করা হবে।' : 'Original photographs and visual essays will be curated here through the visual journal.'}
+        />
+      ) : (
+        <div class="photo-preview-grid">
+          {photos.map((ph) => (
+            <figure class="photo-preview-item">
+              <img src={ph.imageUrl} alt={ph.altText} loading="lazy" />
+              <figcaption>{ph.title[locale] || ph.title.en}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- SECTION 6: MY JOURNEY -->
+  <section class="section journey-section">
+    <div class="container-wide">
+      <div class="section-header">
+        <span class="eyebrow">{t.sections.journey}</span>
+        <h2 class="section-title">{locale === 'bn' ? 'শিক্ষা ও নেতৃত্ব' : 'Academic Milestones & Leadership'}</h2>
+      </div>
+
+      <div class="timeline-container">
+        {timeline.map((item) => (
+          <div class="timeline-row">
+            <div class="timeline-meta">
+              <span class="timeline-year">{item.year}</span>
+              {item.date && <span class="timeline-date">{item.date}</span>}
+            </div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">{item.title[locale] || item.title.en}</h3>
+              <p class="timeline-desc">{item.description[locale] || item.description.en}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: NOW -->
+  <section class="section now-section">
+    <div class="container-wide">
+      <div class="now-box">
+        <div class="now-header">
+          <div>
+            <span class="eyebrow">{t.sections.now}</span>
+            <h2 class="section-title">{locale === 'bn' ? 'এই মুহূর্তে আমার মনোযোগ' : 'What I Am Working On Now'}</h2>
+          </div>
+          <span class="now-badge">
+            ● {locale === 'bn' ? 'আপডেট:' : 'Updated:'} {now.updatedAt}
+          </span>
+        </div>
+
+        <div class="now-grid">
+          {now.items.map((item) => (
+            <div class="now-item">
+              <span class="tag">{item.category}</span>
+              <h3 class="now-item-title">{item.title[locale] || item.title.en}</h3>
+              <p class="now-item-details">{item.details[locale] || item.details.en}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: LATEST PUBLICATIONS -->
+  <section class="section publications-section">
+    <div class="container-wide">
+      <div class="section-header-split">
+        <div>
+          <span class="eyebrow">{t.sections.publications}</span>
+          <h2 class="section-title">{locale === 'bn' ? 'সাম্প্রতিক ব্লগ ও নিবন্ধ' : 'Recent Articles & Notes'}</h2>
+        </div>
+        <a href={`/${locale}/blog`} class="btn">{t.actions.viewAll}</a>
+      </div>
+
+      {blogPosts.length === 0 ? (
+        <EmptyState
+          icon="book"
+          title={t.labels.emptyTitle}
+          description={locale === 'bn' ? 'সাম্প্রতিক প্রকাশনা ও নিবন্ধ প্রস্তুত হলে এখানে প্রদর্শিত হবে।' : 'Recent articles and critical essays will appear here once published.'}
+        />
+      ) : (
+        <div class="projects-grid">
+          {blogPosts.map((b) => (
+            <article class="editorial-card">
+              <span class="eyebrow">{b.category}</span>
+              <h3 class="writing-title">
+                <a href={`/${locale}/blog/${b.slug}`}>{b.title}</a>
+              </h3>
+              <p class="writing-summary">{b.summary}</p>
+              <a href={`/${locale}/blog/${b.slug}`} class="btn-text">
+                {t.actions.readMore} →
+              </a>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- SECTION 9: CONTACT -->
+  <section class="section contact-teaser-section">
+    <div class="container-narrow text-center">
+      <span class="eyebrow">{t.sections.contact}</span>
+      <h2 class="section-title">{t.sections.contactDesc}</h2>
+      <p class="editorial-lead">
+        {locale === 'bn'
+          ? 'নতুন গবেষণা, প্রযুক্তিগত সমাধান, যৌথ সাহিত্যকর্ম বা যেকোনো আলোচনায় আমি আগ্রহী।'
+          : 'Whether you want to discuss AI research, technology architectures, creative storytelling, or simply connect, my inbox is always open.'}
+      </p>
+      <a href={`/${locale}/contact`} class="btn btn-primary" style="font-size: 1.1rem; padding: 0.75rem 1.75rem;">
+        {t.actions.sendMessage}
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero-section {
+    padding: var(--space-16) 0 var(--space-24);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: var(--space-16);
+    align-items: center;
+  }
+
+  .hero-title {
+    font-size: var(--text-display);
+    line-height: 1.08;
+    margin-bottom: var(--space-2);
+    letter-spacing: -0.03em;
+  }
+
+  .hero-role {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--accent-primary);
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+  }
+
+  .hero-intro {
+    font-size: var(--text-lg);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .portrait-frame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .portrait-placeholder {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 4/5;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    text-align: center;
+    position: relative;
+  }
+
+  .portrait-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+  }
+
+  .portrait-monogram {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .portrait-caption {
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    max-width: 220px;
+  }
+
+  .section {
+    padding: var(--space-16) 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-12);
+  }
+
+  .section-header-split {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: var(--space-12);
+    gap: var(--space-4);
+  }
+
+  .section-title {
+    font-size: var(--text-3xl);
+    margin-top: var(--space-2);
+    margin-bottom: 0;
+  }
+
+  .glimpse-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .glimpse-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: all var(--transition-normal);
+  }
+
+  .glimpse-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .glimpse-number {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+    display: block;
+  }
+
+  .glimpse-heading {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .glimpse-text {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+    flex: 1;
+  }
+
+  .glimpse-link-text {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent-primary);
+    font-weight: 500;
+  }
+
+  .projects-grid, .writing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .project-title, .writing-title {
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .project-summary, .writing-summary {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .project-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .photo-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .photo-preview-item img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+  }
+
+  .timeline-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    max-width: 800px;
+  }
+
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .timeline-meta {
+    font-family: var(--font-mono);
+  }
+
+  .timeline-year {
+    display: block;
+    font-weight: 600;
+    color: var(--accent-primary);
+    font-size: var(--text-sm);
+  }
+
+  .timeline-date {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .timeline-title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .timeline-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .now-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+  }
+
+  .now-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-8);
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .now-badge {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent-primary);
+    background: var(--accent-subtle);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+  }
+
+  .now-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .now-item-title {
+    font-size: var(--text-base);
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-1);
+    font-weight: 600;
+  }
+
+  .now-item-details {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-portrait-col {
+      order: -1;
+    }
+    .portrait-placeholder {
+      max-width: 220px;
+      aspect-ratio: 1/1;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .timeline-row {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

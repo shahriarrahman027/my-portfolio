@@ -1,0 +1,236 @@
+---
+import type { Locale, Writing } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EmptyState from '@/components/EmptyState.astro';
+import { getWritings } from '@/lib/content';
+import { getTranslations } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const allWritings = getWritings(undefined, false); // Fetch all published writings to showcase literature in both languages if available
+const currentLocaleWritings = allWritings.filter((w) => w.language === locale);
+
+const categories: Writing['category'][] = [
+  'short-story',
+  'novel',
+  'novel-excerpt',
+  'essay',
+  'reflection',
+  'poetry',
+  'in-progress',
+];
+---
+
+<BaseLayout
+  title={t.nav.writing}
+  description={locale === 'bn' ? 'শাহরিয়ার রহমানের গল্প, উপন্যাস, প্রবন্ধ, কবিতা ও চিন্তাভাবনা' : 'Short stories, novel manuscripts, essays, reflections, and poetry by Shahriar Rahman.'}
+  locale={locale}
+>
+  <div class="container-narrow writing-index-page">
+    <header class="page-header">
+      <span class="eyebrow">{locale === 'bn' ? 'সৃজনশীল সাহিত্য ও চিন্তন' : 'Literature & Solitude'}</span>
+      <h1 class="page-title">{locale === 'bn' ? 'লেখালেখি লাইব্রেরি' : 'Writing Library'}</h1>
+      <p class="editorial-lead">
+        {locale === 'bn'
+          ? 'ছোটগল্প, উপন্যাস, কবিতা এবং মানবিক চেতনা ও অস্তিত্বের নানা মাত্রা নিয়ে মননশীল প্রবন্ধের সংকলন।'
+          : 'A dedicated sanctuary for short stories, novel excerpts, poetry, and personal reflections on consciousness and human connection.'}
+      </p>
+
+      <div class="category-pills">
+        <span class="pill-label">{t.labels.category}:</span>
+        <button type="button" class="category-pill active" data-category="all">
+          {t.actions.filterAll}
+        </button>
+        {categories.map((cat) => (
+          <button type="button" class="category-pill" data-category={cat}>
+            {t.writingCategories[cat] || cat}
+          </button>
+        ))}
+      </div>
+    </header>
+
+    {currentLocaleWritings.length === 0 ? (
+      <EmptyState
+        icon="book"
+        title={locale === 'bn' ? 'এখনও কোনো লেখা প্রকাশিত হয়নি' : 'No writings published yet'}
+        description={locale === 'bn' ? 'মৌলিক ছোটগল্প, প্রবন্ধ ও কবিতার পাণ্ডুলিপি প্রস্তুত হলে এখানে পাঠযোগ্য হবে।' : 'Original short stories, novel drafts, and essays are being written and will appear here when published.'}
+      />
+    ) : (
+      <div class="writing-list">
+        {currentLocaleWritings.map((w) => (
+          <article class="writing-entry" data-cat={w.category}>
+            <div class="writing-meta">
+              <span class="tag">{t.writingCategories[w.category] || w.category}</span>
+              {w.readingTimeMinutes && (
+                <span class="reading-time">
+                  {w.readingTimeMinutes} {t.labels.readingTime}
+                </span>
+              )}
+            </div>
+
+            <h2 class="writing-title">
+              <a href={`/${locale}/writing/${w.slug}`}>{w.title}</a>
+            </h2>
+
+            <p class="writing-summary">{w.summary}</p>
+
+            <div class="writing-footer">
+              <span class="writing-date">
+                {w.createdAt ? new Date(w.createdAt).toLocaleDateString(locale === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+              </span>
+              <a href={`/${locale}/writing/${w.slug}`} class="read-link">
+                {t.actions.readMore} →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .writing-index-page {
+    padding: var(--space-16) 0 var(--space-24);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-16);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-8);
+  }
+
+  .page-title {
+    font-size: var(--text-4xl);
+    margin-top: var(--space-2);
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+  }
+
+  .pill-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .category-pill {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 3px 8px;
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .category-pill:hover, .category-pill.active {
+    background: var(--accent-subtle);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    font-weight: 600;
+  }
+
+  .writing-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .writing-entry {
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-12);
+  }
+
+  .writing-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .reading-time {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .writing-title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .writing-title a {
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .writing-title a:hover {
+    color: var(--accent-primary);
+  }
+
+  .writing-summary {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  .writing-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+  }
+
+  .writing-date {
+    color: var(--text-muted);
+  }
+
+  .read-link {
+    color: var(--accent-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .read-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  function setupCategoryFiltering() {
+    const pills = document.querySelectorAll<HTMLButtonElement>('.category-pill');
+    const entries = document.querySelectorAll<HTMLElement>('.writing-entry');
+
+    pills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        pills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+        const selected = pill.dataset.category;
+
+        entries.forEach((entry) => {
+          if (selected === 'all' || entry.dataset.cat === selected) {
+            entry.style.display = 'block';
+          } else {
+            entry.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  setupCategoryFiltering();
+  document.addEventListener('astro:after-swap', setupCategoryFiltering);
+</script>

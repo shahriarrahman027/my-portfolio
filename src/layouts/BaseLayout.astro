@@ -1,0 +1,87 @@
+---
+import type { Locale } from '@/types';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { getTranslations, getLocalizedPath } from '@/lib/i18n';
+import '@/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  locale?: Locale;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  locale = 'en',
+  ogImage = '/images/og-default.jpg',
+} = Astro.props;
+
+const t = getTranslations(locale);
+const pageTitle = title ? `${title} · ${t.siteTitle}` : `${t.siteTitle} — ${t.siteTagline}`;
+const pageDescription = description || t.siteTagline;
+const currentUrl = Astro.url;
+const canonicalUrl = new URL(currentUrl.pathname, currentUrl.origin).href;
+const altLocale: Locale = locale === 'en' ? 'bn' : 'en';
+const altUrl = new URL(getLocalizedPath(currentUrl, altLocale), currentUrl.origin).href;
+---
+
+<!doctype html>
+<html lang={locale} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang={locale} href={canonicalUrl} />
+    <link rel="alternate" hreflang={altLocale} href={altUrl} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/en', currentUrl.origin).href} />
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={new URL(ogImage, currentUrl.origin).href} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={new URL(ogImage, currentUrl.origin).href} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Inline Theme Script to Prevent Flash -->
+    <script is:inline>
+      (function() {
+        try {
+          const stored = localStorage.getItem('sr_theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (stored === 'dark' || (!stored && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-to-content">
+      {locale === 'bn' ? 'মূল অংশে যান' : 'Skip to content'}
+    </a>
+
+    <Header locale={locale} currentPath={currentUrl.pathname} />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer locale={locale} />
+  </body>
+</html>

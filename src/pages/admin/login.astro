@@ -1,0 +1,206 @@
+---
+import { isAuthenticated } from '@/lib/auth';
+import '@/styles/global.css';
+
+if (isAuthenticated(Astro.request)) {
+  return Astro.redirect('/admin/dashboard');
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Authentication · Shahriar Rahman</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="login-body">
+    <div class="login-container">
+      <div class="login-card">
+        <header class="login-header">
+          <span class="eyebrow">Administrative Portal</span>
+          <h1 class="login-title">Shahriar Rahman</h1>
+          <p class="login-subtitle">Creative Platform & Publishing Dashboard</p>
+        </header>
+
+        <form id="admin-login-form" class="login-form">
+          <div id="login-error" class="login-error" hidden></div>
+
+          <div class="form-group">
+            <label for="admin-password" class="form-label">Administrative Secret</label>
+            <input
+              type="password"
+              id="admin-password"
+              name="password"
+              required
+              autocomplete="current-password"
+              class="form-input"
+              placeholder="Enter admin password..."
+            />
+          </div>
+
+          <button type="submit" id="login-submit-btn" class="btn btn-primary login-btn">
+            Authenticate & Open Dashboard
+          </button>
+        </form>
+
+        <footer class="login-footer">
+          <a href="/en" class="back-link">← Return to Public Website</a>
+        </footer>
+      </div>
+    </div>
+
+    <style>
+      .login-body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--space-6);
+      }
+
+      .login-container {
+        width: 100%;
+        max-width: 440px;
+      }
+
+      .login-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-medium);
+        border-radius: var(--radius-lg);
+        padding: var(--space-8);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .login-header {
+        margin-bottom: var(--space-8);
+        text-align: center;
+      }
+
+      .login-title {
+        font-size: var(--text-3xl);
+        margin-top: var(--space-2);
+        margin-bottom: var(--space-1);
+      }
+
+      .login-subtitle {
+        font-size: var(--text-xs);
+        color: var(--text-secondary);
+        font-family: var(--font-mono);
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-6);
+      }
+
+      .login-error {
+        background: rgba(217, 83, 79, 0.1);
+        border: 1px solid rgba(217, 83, 79, 0.4);
+        color: #d9534f;
+        padding: var(--space-3) var(--space-4);
+        border-radius: var(--radius-sm);
+        font-size: var(--text-xs);
+        font-family: var(--font-mono);
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+      }
+
+      .form-label {
+        font-size: var(--text-xs);
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+      }
+
+      .form-input {
+        background: var(--bg-primary);
+        border: 1px solid var(--border-medium);
+        border-radius: var(--radius-sm);
+        padding: var(--space-3) var(--space-4);
+        font-size: var(--text-base);
+        color: var(--text-primary);
+        outline: none;
+      }
+
+      .form-input:focus {
+        border-color: var(--accent-primary);
+      }
+
+      .login-btn {
+        width: 100%;
+        justify-content: center;
+        padding: var(--space-3);
+        font-size: var(--text-sm);
+      }
+
+      .login-footer {
+        margin-top: var(--space-8);
+        text-align: center;
+        border-top: 1px solid var(--border-light);
+        padding-top: var(--space-4);
+      }
+
+      .back-link {
+        font-size: var(--text-xs);
+        font-family: var(--font-mono);
+        color: var(--text-muted);
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        color: var(--accent-primary);
+      }
+    </style>
+
+    <script>
+      const form = document.getElementById('admin-login-form') as HTMLFormElement;
+      const errorDiv = document.getElementById('login-error') as HTMLDivElement;
+      const btn = document.getElementById('login-submit-btn') as HTMLButtonElement;
+
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pwdInput = document.getElementById('admin-password') as HTMLInputElement;
+        const password = pwdInput.value;
+
+        errorDiv.hidden = true;
+        btn.disabled = true;
+        btn.textContent = 'Verifying...';
+
+        try {
+          const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password }),
+          });
+
+          const data = await res.json();
+          if (!res.ok) {
+            errorDiv.textContent = data.error || 'Authentication failed.';
+            errorDiv.hidden = false;
+            btn.disabled = false;
+            btn.textContent = 'Authenticate & Open Dashboard';
+            return;
+          }
+
+          window.location.href = data.redirect || '/admin/dashboard';
+        } catch (err) {
+          errorDiv.textContent = 'Network or server error.';
+          errorDiv.hidden = false;
+          btn.disabled = false;
+          btn.textContent = 'Authenticate & Open Dashboard';
+        }
+      });
+    </script>
+  </body>
+</html>

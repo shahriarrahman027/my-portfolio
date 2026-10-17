@@ -1,0 +1,253 @@
+{
+  "profile": {
+    "name": "Shahriar Rahman",
+    "titles": {
+      "en": "Computer Science Undergraduate · Aspiring AI Researcher · Writer & Visual Storyteller",
+      "bn": "কম্পিউটার বিজ্ঞান শিক্ষার্থী · ভবিষ্যৎ এআই গবেষক · লেখক ও ভিজ্যুয়াল কথাকার"
+    },
+    "bio": {
+      "en": "Undergraduate student in Computer Science & Engineering at Daffodil International University, Bangladesh. Exploring the intersections of artificial intelligence, machine learning, literature, and visual storytelling.",
+      "bn": "ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটির কম্পিউটার বিজ্ঞান ও প্রকৌশল বিভাগের শিক্ষার্থী। কৃত্রিম বুদ্ধিমত্তা, মেশিন লার্নিং, সাহিত্য ও ভিজ্যুয়াল আখ্যানের মেলবন্ধন অন্বেষণ করছি।"
+    },
+    "longBio": {
+      "en": "I am an undergraduate student in Computer Science and Engineering at Daffodil International University in Bangladesh. My primary technical passions revolve around Artificial Intelligence, Machine Learning, Natural Language Processing, Large Language Models, software engineering, and Python. Alongside computing, I am a dedicated writer exploring short stories, novels, essays, reflections, and poetry, as well as a photography enthusiast fascinated by cinema and storytelling. I serve as Co-Founder and Board Director at SynitySoft, where we pursue impactful technological solutions.",
+      "bn": "আমি ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটির কম্পিউটার বিজ্ঞান ও প্রকৌশল বিভাগের একজন স্নাতক শিক্ষার্থী। আমার মূল কারিগরি আগ্রহ কৃত্রিম বুদ্ধিমত্তা, মেশিন লার্নিং, ন্যাচারাল ল্যাঙ্গুয়েজ প্রসেসিং, এলএলএম, সফটওয়্যার ইঞ্জিনিয়ারিং এবং পাইথন ঘিরে। প্রযুক্তির পাশাপাশি আমি লেখালেখি—ছোটগল্প, উপন্যাস, প্রবন্ধ, মননশীল ভাবনা এবং কবিতায় নিমগ্ন। একইসাথে আমি একজন ফটোগ্রাফি অনুরাগী, যার আগ্রহ রয়েছে সিনেমা ও গল্পবলনে। আমি সিনিটিসফট (SynitySoft)-এর সহ-প্রতিষ্ঠাতা ও বোর্ড পরিচালক হিসেবে অর্থবহ প্রযুক্তি সমাধানে কাজ করছি।"
+    },
+    "university": {
+      "en": "Daffodil International University, Bangladesh",
+      "bn": "ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটি, বাংলাদেশ"
+    },
+    "degree": {
+      "en": "B.Sc. in Computer Science and Engineering",
+      "bn": "বি.এসসি. ইন কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং"
+    },
+    "location": {
+      "en": "Dhaka, Bangladesh",
+      "bn": "ঢাকা, বাংলাদেশ"
+    },
+    "email": "contact@shahriarrahman.com",
+    "githubUsername": "shahriar-rahman",
+    "synitysoftRole": {
+      "en": "Co-Founder & Board Director, SynitySoft",
+      "bn": "সহ-প্রতিষ্ঠাতা ও বোর্ড পরিচালক, সিনিটিসফট"
+    },
+    "interests": {
+      "ai": [
+        {
+          "en": "Artificial Intelligence & Machine Learning",
+          "bn": "কৃত্রিম বুদ্ধিমত্তা ও মেশিন লার্নিং"
+        },
+        {
+          "en": "Natural Language Processing (NLP)",
+          "bn": "ন্যাচারাল ল্যাঙ্গুয়েজ প্রসেসিং (এনএলপি)"
+        },
+        {
+          "en": "Large Language Models (LLMs)",
+          "bn": "লার্জ ল্যাঙ্গুয়েজ মডেলস (এলএলএম)"
+        },
+        {
+          "en": "Python & AI Systems Architecture",
+          "bn": "পাইথন ও এআই সিস্টেম আর্কিটেকচার"
+        }
+      ],
+      "engineering": [
+        {
+          "en": "Software Engineering & Backend Systems",
+          "bn": "সফটওয়্যার ইঞ্জিনিয়ারিং ও ব্যাকএন্ড সিস্টেমস"
+        },
+        {
+          "en": "System Design & Clean Architecture",
+          "bn": "সিস্টেম ডিজাইন ও পরিচ্ছন্ন আর্কিটেকচার"
+        },
+        {
+          "en": "Web Platforms & Developer Tooling",
+          "bn": "ওয়েব প্ল্যাটফর্ম ও ডেভেলপার টুলিং"
+        }
+      ],
+      "literature": [
+        {
+          "en": "Novels & Longform Fiction",
+          "bn": "উপন্যাস ও দীর্ঘ কথাসাহিত্য"
+        },
+        {
+          "en": "Short Stories & Micro-narratives",
+          "bn": "ছোটগল্প ও অণুগল্প"
+        },
+        {
+          "en": "Philosophical & Critical Essays",
+          "bn": "দার্শনিক ও মননশীল প্রবন্ধ"
+        },
+        {
+          "en": "Poetry & Linguistic Rhythm",
+          "bn": "কবিতা ও ছন্দময় অভিব্যক্তি"
+        }
+      ],
+      "visual": [
+        {
+          "en": "Storytelling Photography & Urban Geometry",
+          "bn": "গল্পনির্ভর ফটোগ্রাফি ও নাগরিক জ্যামিতি"
+        },
+        {
+          "en": "Cinema & Narrative Direction",
+          "bn": "চলচ্চিত্র ও আখ্যান পরিচালনা"
+        },
+        {
+          "en": "Visual Journals & Photographic Essays",
+          "bn": "ভিজ্যুয়াল জার্নাল ও স্থিরচিত্রের আখ্যান"
+        }
+      ]
+    },
+    "ambitions": [
+      {
+        "en": "Become an AI researcher publishing meaningful scientific contributions in natural language understanding and machine reasoning.",
+        "bn": "ন্যাচারাল ল্যাঙ্গুয়েজ আন্ডারস্ট্যান্ডিং ও মেশিন রিজনিং বিষয়ে অর্থবহ বৈজ্ঞানিক অবদান রেখে একজন এআই গবেষক হওয়া।"
+      },
+      {
+        "en": "Build reliable, high-utility software and AI products that solve tangible human problems.",
+        "bn": "বাস্তব মানুষের সমস্যা সমাধানে নির্ভরযোগ্য ও কার্যকর সফটওয়্যার এবং এআই পণ্য নির্মাণ করা।"
+      },
+      {
+        "en": "Teach computer science and artificial intelligence at a university to mentor the next generation of thinkers.",
+        "bn": "পরবর্তী প্রজন্মের উদ্ভাবকদের অনুপ্রাণিত করতে বিশ্ববিদ্যালয়ে কম্পিউটার বিজ্ঞান ও কৃত্রিম বুদ্ধিমত্তা শিক্ষাদান করা।"
+      },
+      {
+        "en": "Write and publish novels and literature that explore human condition, consciousness, and society.",
+        "bn": "মানুষের অনুভূতি, চেতনা ও সমাজকে অন্বেষণ করে উপন্যাস এবং সাহিত্য রচনা ও প্রকাশ করা।"
+      },
+      {
+        "en": "Explore the visual mediums of photography and cinema to document moving human stories.",
+        "bn": "মানুষের জীবনযাত্রার হৃদয়স্পর্শী গল্প তুলে ধরতে ফটোগ্রাফি এবং চলচ্চিত্রের ভিজ্যুয়াল মাধ্যমকে অন্বেষণ করা।"
+      }
+    ]
+  },
+  "projects": [],
+  "writings": [],
+  "blogPosts": [],
+  "photographs": [],
+  "readingList": [],
+  "timeline": [
+    {
+      "id": "tl-edu-diu",
+      "year": "Present",
+      "date": "2023 - Present",
+      "title": {
+        "en": "B.Sc. in Computer Science and Engineering",
+        "bn": "বি.এসসি. ইন কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং"
+      },
+      "description": {
+        "en": "Undergraduate studies at Daffodil International University, focusing on algorithms, mathematics, artificial intelligence, and software systems.",
+        "bn": "ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটিতে অ্যালগরিদম, গণিত, কৃত্রিম বুদ্ধিমত্তা ও সফটওয়্যার সিস্টেম বিষয়ে স্নাতক অধ্যয়ন।"
+      },
+      "category": "education",
+      "published": true,
+      "order": 1
+    },
+    {
+      "id": "tl-lead-synitysoft",
+      "year": "Present",
+      "date": "Co-Founder",
+      "title": {
+        "en": "Co-Founder & Board Director",
+        "bn": "সহ-প্রতিষ্ঠাতা ও বোর্ড পরিচালক"
+      },
+      "description": {
+        "en": "Co-founded SynitySoft, steering organizational direction, software strategy, and technology exploration.",
+        "bn": "সিনিটিসফট (SynitySoft)-এর সহ-প্রতিষ্ঠাতা হিসেবে প্রযুক্তিগত দিকনির্দেশনা ও সফটওয়্যার স্ট্র্যাটেজি পরিচালনা।"
+      },
+      "category": "leadership",
+      "published": true,
+      "order": 2
+    }
+  ],
+  "now": {
+    "updatedAt": "2026-10-17",
+    "items": [
+      {
+        "id": "now-1",
+        "category": "studies",
+        "title": {
+          "en": "Undergraduate Studies in Computer Science",
+          "bn": "কম্পিউটার বিজ্ঞানে স্নাতক পড়াশোনা"
+        },
+        "details": {
+          "en": "Deepening understanding of foundational computer science, data structures, algorithm design, and computational theory at Daffodil International University.",
+          "bn": "ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটিতে কম্পিউটার বিজ্ঞানের ভিত্তি, ডেটা স্ট্রাকচার, অ্যালগরিদম ডিজাইন এবং কম্পিউটেশনাল থিওরি অধ্যয়ন।"
+        }
+      },
+      {
+        "id": "now-2",
+        "category": "ai-ml",
+        "title": {
+          "en": "AI, NLP & Large Language Models",
+          "bn": "কৃত্রিম বুদ্ধিমত্তা, এনএলপি ও লার্জ ল্যাঙ্গুয়েজ মডেল"
+        },
+        "details": {
+          "en": "Studying the mathematical foundations of deep learning, transformer architectures, and Natural Language Processing using modern Python frameworks.",
+          "bn": "আধুনিক পাইথন ফ্রেমওয়ার্ক ব্যবহার করে ডিপ লার্নিং, ট্রান্সফরমার আর্কিটেকচার এবং ন্যাচারাল ল্যাঙ্গুয়েজ প্রসেসিংয়ের গাণিতিক ভিত্তি অন্বেষণ।"
+        }
+      },
+      {
+        "id": "now-3",
+        "category": "writing",
+        "title": {
+          "en": "Literary Explorations & Reflections",
+          "bn": "সাহিত্য চর্চা ও ভাবনা"
+        },
+        "details": {
+          "en": "Drafting personal essays, philosophical reflections, and narrative story concepts exploring modern human experiences.",
+          "bn": "আধুনিক মানবীয় অভিজ্ঞতা ও জীবনদর্শন নিয়ে ব্যক্তিগত প্রবন্ধ, চিন্তা এবং গল্পের ভাবনা লিপিবদ্ধ করছি।"
+        }
+      },
+      {
+        "id": "now-4",
+        "category": "photography",
+        "title": {
+          "en": "Visual Documentation & Light",
+          "bn": "ভিজ্যুয়াল পর্যবেক্ষণ ও আলোছায়া"
+        },
+        "details": {
+          "en": "Capturing everyday scenes, urban geometry, and natural light patterns through photography.",
+          "bn": "ফটোগ্রাফির মাধ্যমে প্রতিদিনের দৃশ্যপট, নাগরিক জ্যামিতি এবং প্রাকৃতিক আলোর খেলা ক্যামেরাবন্দি করছি।"
+        }
+      }
+    ]
+  },
+  "contactSubmissions": [
+    {
+      "name": "Research Collaborator",
+      "email": "researcher@example.org",
+      "subject": "AI & NLP Query",
+      "message": "Testing inquiry submission recording in dashboard store.",
+      "id": "sub-1792250735602-ci6kp",
+      "receivedAt": "2026-10-17T15:25:35.602Z",
+      "read": false
+    },
+    {
+      "name": "Dr. Research Reviewer",
+      "email": "reviewer@academic-lab.org",
+      "subject": "AI Collaboration Query",
+      "message": "Testing inquiry submission recording in dashboard store.",
+      "id": "sub-1792251505620-3mje4",
+      "receivedAt": "2026-10-17T15:38:25.620Z",
+      "read": false
+    },
+    {
+      "name": "Dr. Research Reviewer",
+      "email": "reviewer@academic-lab.org",
+      "subject": "AI Collaboration Query",
+      "message": "Testing inquiry submission recording in dashboard store.",
+      "id": "sub-1792251743886-jr6k2",
+      "receivedAt": "2026-10-17T15:42:23.886Z",
+      "read": false
+    },
+    {
+      "name": "Dr. Research Reviewer",
+      "email": "reviewer@academic-lab.org",
+      "subject": "AI Collaboration Query",
+      "message": "Testing inquiry submission recording in dashboard store.",
+      "id": "sub-1792251841048-tvzr7",
+      "receivedAt": "2026-10-17T15:44:01.048Z",
+      "read": false
+    }
+  ]
+}

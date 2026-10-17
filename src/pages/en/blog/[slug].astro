@@ -1,0 +1,8 @@
+---
+import BlogDetailPage from '@/components/pages/BlogDetailPage.astro';
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect('/en/blog');
+---
+
+<BlogDetailPage locale="en" slug={slug} />

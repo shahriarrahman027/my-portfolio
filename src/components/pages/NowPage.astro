@@ -1,0 +1,115 @@
+---
+import type { Locale } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getNow } from '@/lib/content';
+import { getTranslations } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const now = getNow();
+---
+
+<BaseLayout
+  title={t.nav.now}
+  description={locale === 'bn' ? 'শাহরিয়ার রহমান এখন কী করছেন—অধ্যয়ন, গবেষণা ও সৃজনশীল কাজের বর্তমান খবরাখবর' : 'What Shahriar Rahman is currently focused on — studies, AI research preparation, and creative pursuits.'}
+  locale={locale}
+>
+  <div class="container-narrow now-page">
+    <header class="page-header">
+      <div class="now-badge-wrapper">
+        <span class="eyebrow">{locale === 'bn' ? 'বর্তমান অগ্রাধিকার' : 'Current Priorities'}</span>
+        <span class="now-pulse-badge">
+          <span class="pulse-dot"></span>
+          {locale === 'bn' ? 'সর্বশেষ পরিমার্জন:' : 'Last updated:'} {now.updatedAt}
+        </span>
+      </div>
+      <h1 class="page-title">{locale === 'bn' ? 'এই মুহূর্তে আমি কী করছি' : 'What I Am Doing Now'}</h1>
+      <p class="editorial-lead">
+        {locale === 'bn'
+          ? 'এটি ডেরেক সিভার্সের /now পেজ ধারণা থেকে অনুপ্রাণিত—আমার বর্তমান শিক্ষা, গবেষণা, সাহিত্যচর্চা ও অন্যান্য উদ্যোগের একটি সারসংক্ষেপ।'
+          : 'Inspired by Derek Sivers\' "now page" movement. A public declaration of my present academic commitments, intellectual explorations, and creative focus.'}
+      </p>
+    </header>
+
+    <div class="now-items-stack">
+      {now.items.map((item) => (
+        <section class="editorial-card now-card">
+          <span class="tag">{item.category}</span>
+          <h2 class="now-title">{item.title[locale] || item.title.en}</h2>
+          <p class="now-details">{item.details[locale] || item.details.en}</p>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .now-page {
+    padding: var(--space-16) 0 var(--space-24);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-16);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-8);
+  }
+
+  .now-badge-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .now-pulse-badge {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent-primary);
+    background: var(--accent-subtle);
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+  }
+
+  .page-title {
+    font-size: var(--text-4xl);
+    margin-top: var(--space-3);
+  }
+
+  .now-items-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .now-card {
+    padding: var(--space-8);
+  }
+
+  .now-title {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .now-details {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+</style>

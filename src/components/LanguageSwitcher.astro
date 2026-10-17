@@ -1,0 +1,81 @@
+---
+import type { Locale } from '@/types';
+import { getLocalizedPath } from '@/lib/i18n';
+
+interface Props {
+  currentLocale: Locale;
+  className?: string;
+}
+
+const { currentLocale, className = '' } = Astro.props;
+const currentUrl = Astro.url;
+
+const enUrl = getLocalizedPath(currentUrl, 'en');
+const bnUrl = getLocalizedPath(currentUrl, 'bn');
+---
+
+<nav class:list={['lang-switcher', className]} aria-label="Language selection">
+  <a
+    href={enUrl}
+    class:list={['lang-link', { active: currentLocale === 'en' }]}
+    aria-current={currentLocale === 'en' ? 'page' : undefined}
+    hreflang="en"
+    lang="en"
+  >
+    EN
+  </a>
+  <span class="lang-divider" aria-hidden="true">|</span>
+  <a
+    href={bnUrl}
+    class:list={['lang-link', 'bn-text', { active: currentLocale === 'bn' }]}
+    aria-current={currentLocale === 'bn' ? 'page' : undefined}
+    hreflang="bn"
+    lang="bn"
+  >
+    বাংলা
+  </a>
+</nav>
+
+<style>
+  .lang-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+    background: var(--bg-surface);
+  }
+
+  .lang-link {
+    color: var(--text-muted);
+    padding: 2px 4px;
+    border-radius: 2px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all var(--transition-fast);
+  }
+
+  .lang-link:hover {
+    color: var(--text-primary);
+  }
+
+  .lang-link.active {
+    color: var(--accent-primary);
+    font-weight: 600;
+    background: var(--accent-subtle);
+  }
+
+  .lang-link.bn-text {
+    font-family: var(--font-bengali);
+    font-size: var(--text-sm);
+  }
+
+  .lang-divider {
+    color: var(--border-medium);
+    user-select: none;
+    font-size: 10px;
+  }
+</style>

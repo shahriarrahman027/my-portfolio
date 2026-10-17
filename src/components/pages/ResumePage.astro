@@ -1,0 +1,255 @@
+---
+import type { Locale } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getProfile, getTimeline } from '@/lib/content';
+import { getTranslations } from '@/lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const profile = getProfile();
+const timeline = getTimeline(false);
+
+const experienceItems = timeline.filter((t) => t.category === 'experience');
+---
+
+<BaseLayout
+  title={t.nav.resume}
+  description={locale === 'bn' ? 'শাহরিয়ার রহমানের জীবনবৃত্তান্ত ও একাডেমিক প্রোফাইল' : 'Curriculum Vitae and professional academic profile of Shahriar Rahman.'}
+  locale={locale}
+>
+  <div class="container-narrow resume-page">
+    <header class="resume-header">
+      <div class="resume-identity">
+        <h1 class="resume-name">{t.siteTitle}</h1>
+        <p class="resume-subtitle">{profile.titles[locale] || profile.titles.en}</p>
+        <div class="resume-contacts">
+          <span>📍 {profile.location[locale] || profile.location.en}</span>
+          <span>·</span>
+          <span>✉️ {profile.email}</span>
+          <span>·</span>
+          <span>💻 github.com/{profile.githubUsername || 'shahriar-rahman'}</span>
+        </div>
+      </div>
+
+      <div class="resume-download-bar no-print">
+        {profile.resumeUrl ? (
+          <a href={profile.resumeUrl} download class="btn btn-primary">
+            📥 {t.actions.downloadResume}
+          </a>
+        ) : (
+          <span class="resume-pending-note">
+            ℹ️ {locale === 'bn' ? 'পিডিএফ জীবনবৃত্তান্ত দ্রুত আপলোড করা হবে' : 'PDF version pending upload via dashboard'}
+          </span>
+        )}
+        <button type="button" onclick="window.print()" class="btn">
+          🖨️ {locale === 'bn' ? 'প্রিন্ট করুন' : 'Print CV'}
+        </button>
+      </div>
+    </header>
+
+    <div class="resume-body">
+      <!-- Education -->
+      <section class="resume-section">
+        <h2 class="resume-section-heading">{locale === 'bn' ? 'শিক্ষাগত যোগ্যতা' : 'Education'}</h2>
+        <div class="resume-entries">
+          <div class="resume-item">
+            <div class="resume-item-top">
+              <h3 class="resume-institution">{profile.university[locale] || profile.university.en}</h3>
+              <span class="resume-date">{locale === 'bn' ? 'বর্তমান' : 'Present'}</span>
+            </div>
+            <p class="resume-degree">{profile.degree[locale] || profile.degree.en}</p>
+            <p class="resume-details">
+              {locale === 'bn'
+                ? 'কম্পিউটার বিজ্ঞান ও প্রকৌশলে স্নাতক অধ্যয়ন। মূল ফোকাস: অ্যালগরিদম, গাণিতিক ভিত্তি, ডাটা স্ট্রাকচার, সিস্টেম আর্কিটেকচার এবং কৃত্রিম বুদ্ধিমত্তা।'
+                : 'Undergraduate study in Computer Science and Engineering. Focus areas include algorithms, discrete mathematics, software systems, and foundations of artificial intelligence.'}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Leadership & Experience -->
+      <section class="resume-section">
+        <h2 class="resume-section-heading">{locale === 'bn' ? 'নেতৃত্ব ও অভিজ্ঞতা' : 'Leadership & Experience'}</h2>
+        <div class="resume-entries">
+          <div class="resume-item">
+            <div class="resume-item-top">
+              <h3 class="resume-institution">SynitySoft</h3>
+              <span class="resume-date">{locale === 'bn' ? 'বর্তমান' : 'Co-Founder & Director'}</span>
+            </div>
+            <p class="resume-degree">{profile.synitysoftRole[locale] || profile.synitysoftRole.en}</p>
+            <p class="resume-details">
+              {locale === 'bn'
+                ? 'সফটওয়্যার সমাধান পরিকল্পনা, পরিচালনা এবং কৌশলগত প্রযুক্তিগত নেতৃত্ব প্রদান।'
+                : 'Strategic organizational direction, technical architecture stewardship, and software product engineering.'}
+            </p>
+          </div>
+
+          {experienceItems.map((exp) => (
+            <div class="resume-item">
+              <div class="resume-item-top">
+                <h3 class="resume-institution">{exp.title[locale] || exp.title.en}</h3>
+                <span class="resume-date">{exp.year}</span>
+              </div>
+              <p class="resume-details">{exp.description[locale] || exp.description.en}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Technical & Research Competencies -->
+      <section class="resume-section">
+        <h2 class="resume-section-heading">{locale === 'bn' ? 'দক্ষতা ও আগ্রহের ক্ষেত্র' : 'Technical & Research Domains'}</h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h4 class="skill-title">AI & Data</h4>
+            <p class="skill-desc">Python, Machine Learning Foundations, Natural Language Processing, Large Language Models</p>
+          </div>
+          <div class="skill-category">
+            <h4 class="skill-title">Software Engineering</h4>
+            <p class="skill-desc">Backend Architecture, Systems Programming, Git & Version Control, Clean Code Principles</p>
+          </div>
+          <div class="skill-category">
+            <h4 class="skill-title">Creative & Research</h4>
+            <p class="skill-desc">Technical Writing, Narrative Literature, Observational Photography, Visual Storytelling</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Languages -->
+      <section class="resume-section">
+        <h2 class="resume-section-heading">{locale === 'bn' ? 'ভাষাগত দক্ষতা' : 'Languages'}</h2>
+        <p class="resume-details">
+          {locale === 'bn'
+            ? 'বাংলা (মাতৃভাষা — কথা ও সাহিত্য রচনা), ইংরেজি (পেশাগত ও একাডেমিক যোগাযোগ)।'
+            : 'English (Professional & Academic proficiency), Bengali (Native speaker & literary author).'}
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .resume-page {
+    padding: var(--space-16) 0 var(--space-24);
+  }
+
+  .resume-header {
+    border-bottom: 2px solid var(--text-primary);
+    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-12);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+
+  .resume-name {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-1);
+    letter-spacing: -0.02em;
+  }
+
+  .resume-subtitle {
+    font-size: var(--text-base);
+    color: var(--accent-primary);
+    font-family: var(--font-mono);
+    margin-bottom: var(--space-3);
+  }
+
+  .resume-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+
+  .resume-download-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .resume-pending-note {
+    font-size: var(--text-xs);
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+  }
+
+  .resume-section {
+    margin-bottom: var(--space-12);
+  }
+
+  .resume-section-heading {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-primary);
+    border-bottom: 1px solid var(--border-medium);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .resume-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .resume-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: var(--space-1);
+  }
+
+  .resume-institution {
+    font-size: var(--text-xl);
+    margin: 0;
+  }
+
+  .resume-date {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .resume-degree {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .resume-details {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .skill-title {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-1);
+  }
+
+  .skill-desc {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+</style>

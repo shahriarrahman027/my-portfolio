@@ -1,0 +1,343 @@
+---
+import type { Locale } from '@/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EmptyState from '@/components/EmptyState.astro';
+import { getProfile, getProjects } from '@/lib/content';
+import { getTranslations } from '@/lib/i18n';
+import { fetchUserRepos } from '@/lib/github';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getTranslations(locale);
+const profile = getProfile();
+const projects = getProjects(false);
+const githubRepos = await fetchUserRepos(profile.githubUsername || 'shahriar-rahman');
+---
+
+<BaseLayout
+  title={t.nav.technology}
+  description={locale === 'bn' ? 'প্রযুক্তি, এআই গবেষণা এবং সফটওয়্যার ইঞ্জিনিয়ারিং প্রজেক্ট' : 'Technology projects, AI research explorations, and software engineering.'}
+  locale={locale}
+>
+  <div class="container-wide technology-page">
+    <header class="page-header">
+      <span class="eyebrow">{locale === 'bn' ? 'কারিগরি ও গবেষণা অন্বেষণ' : 'Technical & Research Explorations'}</span>
+      <h1 class="page-title">{locale === 'bn' ? 'প্রযুক্তি ও প্রজেক্ট পোর্টফোলিও' : 'Technology & Project Portfolio'}</h1>
+      <p class="editorial-lead">
+        {locale === 'bn'
+          ? 'কম্পিউটার বিজ্ঞান, কৃত্রিম বুদ্ধিমত্তা, সিস্টেম আর্কিটেকচার এবং সফটওয়্যার প্রকৌশলের মেলবন্ধন।'
+          : 'Connecting computer science fundamentals, artificial intelligence explorations, and thoughtful software systems.'}
+      </p>
+    </header>
+
+    <!-- Skills & Domains of Interest -->
+    <section class="tech-domains-section">
+      <h2 class="section-title">{locale === 'bn' ? 'আগ্রহ ও অধ্যয়নের ক্ষেত্রসমূহ' : 'Areas of Study & Technical Interests'}</h2>
+      <p class="section-subtext">
+        {locale === 'bn'
+          ? 'এই ক্ষেত্রগুলো আমার মূল কারিগরি আগ্রহ ও অধ্যয়নের বিষয়—এখানে কোনো অবাস্তব দাবি করা হয়নি।'
+          : 'These reflect active academic study, research curiosities, and practical engineering interests.'}
+      </p>
+
+      <div class="domains-grid">
+        <div class="editorial-card domain-card">
+          <span class="eyebrow">{locale === 'bn' ? 'কৃত্রিম বুদ্ধিমত্তা' : 'Artificial Intelligence'}</span>
+          <h3 class="domain-title">AI, Machine Learning & NLP</h3>
+          <ul class="domain-list">
+            {profile.interests.ai.map((item) => (
+              <li>{item[locale] || item.en}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="editorial-card domain-card">
+          <span class="eyebrow">{locale === 'bn' ? 'সফটওয়্যার ইঞ্জিনিয়ারিং' : 'Software Engineering'}</span>
+          <h3 class="domain-title">Systems & Architecture</h3>
+          <ul class="domain-list">
+            {profile.interests.engineering.map((item) => (
+              <li>{item[locale] || item.en}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects & Case Studies -->
+    <section class="projects-section" id="projects">
+      <h2 class="section-title">{locale === 'bn' ? 'প্রজেক্ট কেস স্টাডি' : 'Projects & Case Studies'}</h2>
+      <p class="section-subtext">
+        {locale === 'bn'
+          ? 'বাস্তব সমস্যা সমাধান, স্থাপত্য সিদ্ধান্ত এবং আমার সুনির্দিষ্ট অবদান।'
+          : 'Real problem-solving, architectural rationale, and verified contributions.'}
+      </p>
+
+      {projects.length === 0 ? (
+        <EmptyState
+          icon="code"
+          title={locale === 'bn' ? 'এখনও কোনো প্রজেক্ট যোগ করা হয়নি' : 'No projects published yet'}
+          description={locale === 'bn' ? 'সম্পূর্ণ কেস স্টাডি, স্থাপত্য নকশা এবং সোর্স কোড দ্রুত এখানে প্রকাশিত হবে।' : 'Complete architectural case studies, diagrams, and repository links will appear here once published.'}
+        />
+      ) : (
+        <div class="projects-list">
+          {projects.map((p) => (
+            <article class="project-case-study" id={p.slug}>
+              <div class="case-study-header">
+                <span class="tag">{p.status}</span>
+                <h3 class="case-study-title">{p.title[locale] || p.title.en}</h3>
+                <p class="case-study-summary">{p.summary[locale] || p.summary.en}</p>
+              </div>
+
+              <div class="case-study-grid">
+                {p.problem && (
+                  <div class="case-study-block">
+                    <h4 class="case-study-subtitle">{t.labels.problemStatement}</h4>
+                    <p>{p.problem[locale] || p.problem.en}</p>
+                  </div>
+                )}
+                {p.approach && (
+                  <div class="case-study-block">
+                    <h4 class="case-study-subtitle">{t.labels.approach}</h4>
+                    <p>{p.approach[locale] || p.approach.en}</p>
+                  </div>
+                )}
+                {p.contribution && (
+                  <div class="case-study-block">
+                    <h4 class="case-study-subtitle">{t.labels.myContribution}</h4>
+                    <p>{p.contribution[locale] || p.contribution.en}</p>
+                  </div>
+                )}
+              </div>
+
+              <div class="case-study-footer">
+                <div class="tech-tags">
+                  <span class="tech-label">{t.labels.technologies}:</span>
+                  {p.technologies.map((t) => (
+                    <span class="tag">{t}</span>
+                  ))}
+                </div>
+
+                <div class="case-study-links">
+                  {p.repoUrl && (
+                    <a href={p.repoUrl} target="_blank" rel="noopener noreferrer" class="btn">
+                      {t.labels.codeRepository} ↗
+                    </a>
+                  )}
+                  {p.demoUrl && (
+                    <a href={p.demoUrl} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                      {t.labels.liveDemonstration} ↗
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <!-- Selected GitHub Repositories -->
+    <section class="github-section">
+      <div class="section-header-split">
+        <div>
+          <span class="eyebrow">{locale === 'bn' ? 'ওপেন সোর্স কোড' : 'Public Repositories'}</span>
+          <h2 class="section-title">{locale === 'bn' ? 'গিটহাব অ্যাক্টিভিটি ও রিপোজিটরি' : 'GitHub Activity & Repositories'}</h2>
+        </div>
+        <a href={`https://github.com/${profile.githubUsername || 'shahriar-rahman'}`} target="_blank" rel="noopener noreferrer" class="btn">
+          github.com/{profile.githubUsername || 'shahriar-rahman'} ↗
+        </a>
+      </div>
+
+      {githubRepos.length === 0 ? (
+        <div class="empty-state">
+          <p class="empty-state-desc">
+            {locale === 'bn'
+              ? 'গিটহাবের রিপোজিটরি তালিকা সরাসরি এপিআই থেকে সিঙ্ক হয়। সংযোগ না থাকলে সরাসরি প্রোফাইল দেখুন।'
+              : 'Public repositories are fetched live via the GitHub API. Connect directly via GitHub profile above.'}
+          </p>
+        </div>
+      ) : (
+        <div class="github-grid">
+          {githubRepos.map((repo) => (
+            <div class="editorial-card repo-card">
+              <h3 class="repo-name">
+                <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
+                  {repo.name} ↗
+                </a>
+              </h3>
+              <p class="repo-desc">{repo.description || 'No description provided.'}</p>
+              <div class="repo-meta">
+                {repo.language && <span class="tag">{repo.language}</span>}
+                <span class="repo-stars">★ {repo.stargazers_count}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .technology-page {
+    padding: var(--space-16) 0 var(--space-24);
+  }
+
+  .page-header {
+    margin-bottom: var(--space-16);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: var(--space-8);
+  }
+
+  .page-title {
+    font-size: var(--text-4xl);
+    margin-top: var(--space-2);
+  }
+
+  .tech-domains-section, .projects-section, .github-section {
+    margin-bottom: var(--space-24);
+  }
+
+  .section-subtext {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-8);
+    max-width: 600px;
+  }
+
+  .domains-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .domain-title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-4);
+  }
+
+  .domain-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .domain-list li {
+    position: relative;
+    padding-left: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .domain-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent-primary);
+  }
+
+  .projects-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .project-case-study {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .case-study-title {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+
+  .case-study-summary {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    font-family: var(--font-serif);
+    font-style: italic;
+    margin-bottom: var(--space-6);
+  }
+
+  .case-study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-6);
+    margin-bottom: var(--space-8);
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    padding: var(--space-6) 0;
+  }
+
+  .case-study-subtitle {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .case-study-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .tech-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tech-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .case-study-links {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .github-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .repo-name {
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    margin-bottom: var(--space-2);
+  }
+
+  .repo-desc {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+    line-height: 1.5;
+  }
+
+  .repo-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+</style>

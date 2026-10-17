@@ -1,0 +1,10 @@
+---
+import { isAuthenticated } from '@/lib/auth';
+
+const authed = isAuthenticated(Astro.request);
+if (authed) {
+  return Astro.redirect('/admin/dashboard');
+} else {
+  return Astro.redirect('/admin/login');
+}
+---

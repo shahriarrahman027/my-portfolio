@@ -1,0 +1,8 @@
+---
+import WritingDetailPage from '@/components/pages/WritingDetailPage.astro';
+
+const { slug } = Astro.params;
+if (!slug) return Astro.redirect('/en/writing');
+---
+
+<WritingDetailPage locale="en" slug={slug} />
