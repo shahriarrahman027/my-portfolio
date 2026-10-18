@@ -322,6 +322,15 @@
       "id": "sub-1792292772459-ldd8l",
       "receivedAt": "2026-10-18T03:06:12.459Z",
       "read": false
+    },
+    {
+      "name": "Dr. Research Reviewer",
+      "email": "reviewer@academic-lab.org",
+      "subject": "AI Collaboration Query",
+      "message": "Testing inquiry submission recording in dashboard store.",
+      "id": "sub-1792293020699-rjwb0",
+      "receivedAt": "2026-10-18T03:10:20.699Z",
+      "read": false
     }
   ]
 }
