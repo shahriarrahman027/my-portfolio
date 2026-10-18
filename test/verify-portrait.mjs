@@ -22,6 +22,7 @@ test('Content profile references portraitUrl', () => {
   assert.strictEqual(content.profile.portraitUrl, '/images/profile/shahriar-rahman.webp');
   assert.strictEqual(content.profile.name, 'Shahriar Rahman');
   assert.strictEqual(content.profile.githubUsername, 'shahriarrahman027');
+  assert.strictEqual(content.profile.email, 'mdshahriar.contact@gmail.com');
 });
 
 test('HomePage and AboutPage contain portrait markup with correct alt text and dimensions', () => {

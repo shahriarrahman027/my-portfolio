@@ -54,7 +54,7 @@ const currentYear = new Date().getFullYear();
           <ul class="footer-links">
             <li><a href={`/${locale}/contact`}>{t.nav.contact}</a></li>
             <li><a href={`https://github.com/${profile.githubUsername || 'shahriarrahman027'}`} target="_blank" rel="noopener noreferrer">GitHub ↗</a></li>
-            <li><a href="mailto:contact@shahriarrahman.com">Email ↗</a></li>
+            <li><a href={`mailto:${profile.email || 'mdshahriar.contact@gmail.com'}`}>Email ↗</a></li>
             <li><a href="/admin" class="admin-link">{t.nav.admin}</a></li>
           </ul>
         </div>
