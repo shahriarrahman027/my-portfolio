@@ -8,7 +8,7 @@
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "astro": "ASTRO_TELEMETRY_DISABLED=1 astro",
-    "test": "node --test test/platform.test.mjs",
+    "test": "node --test test/*.test.mjs test/verify-portrait.mjs",
     "test:integration": "node scripts/http-verification.mjs"
   },
   "dependencies": {

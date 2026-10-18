@@ -1693,6 +1693,51 @@ export function AdminDashboardApp() {
                   </div>
 
                   <div className="form-group">
+                    <label className="form-label">Profile Portrait Photograph</label>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/avif"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const url = await handleFileUpload(file);
+                          if (url) {
+                            setData({
+                              ...data,
+                              profile: { ...data.profile, portraitUrl: url },
+                            });
+                            showNotification('Portrait image attached. Remember to click Save Profile.');
+                          }
+                        }
+                      }}
+                    />
+                    {data.profile.portraitUrl && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '6px' }}>
+                        <img
+                          src={data.profile.portraitUrl}
+                          alt="Portrait Preview"
+                          style={{ width: '48px', height: '60px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border-medium)' }}
+                        />
+                        <div style={{ fontSize: '11px', fontFamily: 'monospace' }}>
+                          <span style={{ color: 'var(--accent-primary)', display: 'block' }}>Active: {data.profile.portraitUrl}</span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setData({
+                                ...data,
+                                profile: { ...data.profile, portraitUrl: '/images/profile/shahriar-rahman.webp' },
+                              })
+                            }
+                            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                          >
+                            Reset to default portrait
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="form-group">
                     <label className="form-label">Upload Résumé PDF</label>
                     <input
                       type="file"

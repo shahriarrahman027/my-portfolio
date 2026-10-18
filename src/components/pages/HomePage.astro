@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import type { Locale } from '@/types';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import EmptyState from '@/components/EmptyState.astro';
@@ -18,6 +20,12 @@ const blogPosts = getBlogPosts(locale, false).slice(0, 3);
 const photos = getPhotographs(false).slice(0, 4);
 const now = getNow();
 const timeline = getTimeline(false).slice(0, 3);
+
+// Verify portrait existence gracefully
+const portraitUrl = profile.portraitUrl || '/images/profile/shahriar-rahman.webp';
+const portraitExists = portraitUrl
+  ? fs.existsSync(path.resolve(process.cwd(), 'public', portraitUrl.replace(/^\//, '')))
+  : false;
 ---
 
 <BaseLayout
@@ -32,6 +40,40 @@ const timeline = getTimeline(false).slice(0, 3);
         <span class="eyebrow">{locale === 'bn' ? 'ব্যক্তিগত প্ল্যাটফর্ম ও আর্কাইভ' : 'Personal Platform & Archive'}</span>
         <h1 class="hero-title">{t.siteTitle}</h1>
         <p class="hero-role">{profile.titles[locale] || profile.titles.en}</p>
+
+        <!-- Portrait displayed near intro on mobile for natural reading flow -->
+        <div class="hero-mobile-portrait">
+          {portraitExists ? (
+            <figure class="portrait-figure">
+              <div class="portrait-image-wrapper">
+                <picture>
+                  <source srcset={portraitUrl.endsWith('.webp') ? portraitUrl : portraitUrl.replace(/\.[^.]+$/, '.webp')} type="image/webp" />
+                  <img
+                    src={portraitUrl}
+                    alt={locale === 'bn' ? 'শাহরিয়ার রহমানের প্রতিকৃতি' : 'Portrait of Shahriar Rahman'}
+                    class="portrait-img"
+                    width="819"
+                    height="1024"
+                    loading="eager"
+                    fetchpriority="high"
+                  />
+                </picture>
+              </div>
+              <figcaption class="portrait-caption-bar">
+                <span class="portrait-caption-name">{profile.name}</span>
+                <span class="portrait-caption-sub">{profile.university[locale] || profile.university.en}</span>
+              </figcaption>
+            </figure>
+          ) : (
+            <div class="portrait-placeholder" aria-label="Development portrait placeholder">
+              <span class="placeholder-tag">Placeholder</span>
+              <span class="portrait-monogram">SR</span>
+              <span class="portrait-caption">
+                {profile.university[locale] || profile.university.en}
+              </span>
+            </div>
+          )}
+        </div>
 
         <p class="hero-intro">
           {profile.longBio[locale] || profile.longBio.en}
@@ -50,14 +92,39 @@ const timeline = getTimeline(false).slice(0, 3);
         </div>
       </div>
 
+      <!-- Desktop portrait column -->
       <div class="hero-portrait-col">
         <div class="portrait-frame">
-          <div class="portrait-placeholder">
-            <span class="portrait-monogram">SR</span>
-            <span class="portrait-caption">
-              {profile.university[locale] || profile.university.en}
-            </span>
-          </div>
+          {portraitExists ? (
+            <figure class="portrait-figure">
+              <div class="portrait-image-wrapper">
+                <picture>
+                  <source srcset={portraitUrl.endsWith('.webp') ? portraitUrl : portraitUrl.replace(/\.[^.]+$/, '.webp')} type="image/webp" />
+                  <img
+                    src={portraitUrl}
+                    alt={locale === 'bn' ? 'শাহরিয়ার রহমানের প্রতিকৃতি' : 'Portrait of Shahriar Rahman'}
+                    class="portrait-img"
+                    width="819"
+                    height="1024"
+                    loading="eager"
+                    fetchpriority="high"
+                  />
+                </picture>
+              </div>
+              <figcaption class="portrait-caption-bar">
+                <span class="portrait-caption-name">{profile.name}</span>
+                <span class="portrait-caption-sub">{profile.university[locale] || profile.university.en}</span>
+              </figcaption>
+            </figure>
+          ) : (
+            <div class="portrait-placeholder" aria-label="Development portrait placeholder">
+              <span class="placeholder-tag">Placeholder</span>
+              <span class="portrait-monogram">SR</span>
+              <span class="portrait-caption">
+                {profile.university[locale] || profile.university.en}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -384,14 +451,86 @@ const timeline = getTimeline(false).slice(0, 3);
     align-items: center;
   }
 
-  .portrait-placeholder {
+  .hero-mobile-portrait {
+    display: none;
+    margin: var(--space-6) 0;
+  }
+
+  .portrait-figure {
     width: 100%;
-    max-width: 320px;
-    aspect-ratio: 4/5;
+    max-width: 360px;
     background: var(--bg-surface);
     border: 1px solid var(--border-medium);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin: 0;
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .portrait-figure:hover {
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .portrait-image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--bg-subtle);
+  }
+
+  .portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 18%;
+    display: block;
+    transition: transform var(--transition-slow);
+  }
+
+  .portrait-figure:hover .portrait-img {
+    transform: scale(1.02);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .portrait-figure:hover .portrait-img {
+      transform: none;
+    }
+  }
+
+  .portrait-caption-bar {
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .portrait-caption-name {
+    font-family: var(--font-serif);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .portrait-caption-sub {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+
+  .portrait-placeholder {
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 4/5;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -399,6 +538,20 @@ const timeline = getTimeline(false).slice(0, 3);
     padding: var(--space-6);
     text-align: center;
     position: relative;
+  }
+
+  .placeholder-tag {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--accent-subtle);
+    color: var(--accent-text);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
   }
 
   .portrait-placeholder::before {
@@ -628,13 +781,19 @@ const timeline = getTimeline(false).slice(0, 3);
   @media (max-width: 900px) {
     .hero-grid {
       grid-template-columns: 1fr;
+      gap: var(--space-8);
     }
     .hero-portrait-col {
-      order: -1;
+      display: none;
     }
-    .portrait-placeholder {
-      max-width: 220px;
-      aspect-ratio: 1/1;
+    .hero-mobile-portrait {
+      display: block;
+      margin: var(--space-6) 0 var(--space-8);
+    }
+    .hero-mobile-portrait .portrait-figure,
+    .hero-mobile-portrait .portrait-placeholder {
+      max-width: 280px;
+      margin: 0 auto;
     }
   }
 

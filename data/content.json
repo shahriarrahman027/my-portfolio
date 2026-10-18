@@ -304,6 +304,24 @@
       "id": "sub-1792290686013-59l1o",
       "receivedAt": "2026-10-18T02:31:26.013Z",
       "read": false
+    },
+    {
+      "name": "Dr. Research Reviewer",
+      "email": "reviewer@academic-lab.org",
+      "subject": "AI Collaboration Query",
+      "message": "Testing inquiry submission recording in dashboard store.",
+      "id": "sub-1792292711601-8eizy",
+      "receivedAt": "2026-10-18T03:05:11.601Z",
+      "read": false
+    },
+    {
+      "name": "Dr. Research Reviewer",
+      "email": "reviewer@academic-lab.org",
+      "subject": "AI Collaboration Query",
+      "message": "Testing inquiry submission recording in dashboard store.",
+      "id": "sub-1792292772459-ldd8l",
+      "receivedAt": "2026-10-18T03:06:12.459Z",
+      "read": false
     }
   ]
 }

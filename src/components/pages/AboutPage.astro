@@ -1,4 +1,6 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import type { Locale } from '@/types';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getProfile, getTimeline } from '@/lib/content';
@@ -12,6 +14,11 @@ const { locale } = Astro.props;
 const t = getTranslations(locale);
 const profile = getProfile();
 const timeline = getTimeline(false);
+
+const portraitUrl = profile.portraitUrl || '/images/profile/shahriar-rahman.webp';
+const portraitExists = portraitUrl
+  ? fs.existsSync(path.resolve(process.cwd(), 'public', portraitUrl.replace(/^\//, '')))
+  : false;
 ---
 
 <BaseLayout
@@ -19,106 +26,360 @@ const timeline = getTimeline(false);
   description={profile.bio[locale] || profile.bio.en}
   locale={locale}
 >
-  <article class="container-narrow about-page">
-    <header class="page-header">
-      <span class="eyebrow">{locale === 'bn' ? 'আমার গল্প ও পরিচয়' : 'My Story & Philosophy'}</span>
-      <h1 class="page-title">{locale === 'bn' ? 'পরিচিতি: শাহরিয়ার রহমান' : 'About Shahriar Rahman'}</h1>
-      <p class="editorial-lead">
-        {profile.titles[locale] || profile.titles.en}
-      </p>
+  <div class="about-page">
+    <!-- EDITORIAL INTRO SECTION -->
+    <header class="about-intro-section">
+      <div class="container">
+        <div class="about-intro-grid">
+          <!-- Text column -->
+          <div class="about-intro-content">
+            <span class="eyebrow">{locale === 'bn' ? 'আমার গল্প ও পরিচয়' : 'My Story & Philosophy'}</span>
+            <h1 class="page-title">{locale === 'bn' ? 'পরিচিতি: শাহরিয়ার রহমান' : 'About Shahriar Rahman'}</h1>
+            <p class="editorial-lead">
+              {profile.titles[locale] || profile.titles.en}
+            </p>
+            <p class="about-intro-bio">
+              {profile.longBio[locale] || profile.longBio.en}
+            </p>
+
+            <div class="about-meta-grid">
+              <div class="meta-pill">
+                <span class="meta-label">{locale === 'bn' ? 'অবস্থান' : 'Location'}</span>
+                <span class="meta-value">{locale === 'bn' ? 'ঢাকা, বাংলাদেশ' : 'Dhaka, Bangladesh'}</span>
+              </div>
+              <div class="meta-pill">
+                <span class="meta-label">{locale === 'bn' ? 'শিক্ষা' : 'Education'}</span>
+                <span class="meta-value">{profile.university[locale] || profile.university.en}</span>
+              </div>
+              <div class="meta-pill">
+                <span class="meta-label">{locale === 'bn' ? 'নেতৃত্ব' : 'Venture'}</span>
+                <span class="meta-value">{locale === 'bn' ? 'সিনিটিসফট (SynitySoft)' : 'SynitySoft (Co-Founder)'}</span>
+              </div>
+              <div class="meta-pill">
+                <span class="meta-label">{locale === 'bn' ? 'ফোকাস' : 'Core Focus'}</span>
+                <span class="meta-value">{locale === 'bn' ? 'এআই গবেষণা ও সাহিত্য' : 'AI Research & Literature'}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Portrait column -->
+          <div class="about-portrait-col">
+            {portraitExists ? (
+              <figure class="about-portrait-card">
+                <div class="about-portrait-image-wrapper">
+                  <picture>
+                    <source srcset={portraitUrl.endsWith('.webp') ? portraitUrl : portraitUrl.replace(/\.[^.]+$/, '.webp')} type="image/webp" />
+                    <img
+                      src={portraitUrl}
+                      alt={locale === 'bn' ? 'শাহরিয়ার রহমানের প্রতিকৃতি' : 'Portrait of Shahriar Rahman'}
+                      class="about-portrait-img"
+                      width="819"
+                      height="1024"
+                      loading="eager"
+                      fetchpriority="high"
+                    />
+                  </picture>
+                </div>
+                <figcaption class="about-portrait-caption">
+                  <span class="about-caption-quote">
+                    {locale === 'bn'
+                      ? '“প্রযুক্তি, গবেষণা, সাহিত্য ও ফটোগ্রাফির সংযোগস্থলে এক আত্মানুসন্ধানী অভিযাত্রা।”'
+                      : '“Exploring the intersection of technology, research, literature, photography, and storytelling.”'}
+                  </span>
+                  <span class="about-caption-author">{profile.name}</span>
+                </figcaption>
+              </figure>
+            ) : (
+              <div class="about-portrait-placeholder" aria-label="Development portrait placeholder">
+                <span class="placeholder-tag">Placeholder</span>
+                <span class="placeholder-monogram">SR</span>
+                <span class="placeholder-text">{profile.name}</span>
+                <span class="placeholder-sub">{profile.university[locale] || profile.university.en}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </header>
 
-    <div class="prose">
-      <section class="about-section">
-        <h2>{locale === 'bn' ? 'যাত্রা শুরু ও কম্পিউটার বিজ্ঞানের আবিষ্কার' : 'The Beginning & The World of Computing'}</h2>
-        <p>
-          {locale === 'bn'
-            ? 'প্রযুক্তির প্রতি আমার আকর্ষণ শুরু হয়েছিল কিভাবে সিস্টেমগুলো অন্তরালে কাজ করে তা বোঝার গভীর কৌতূহল থেকে। কোডিংয়ের সাথে প্রথম পরিচিতি আমাকে একটি নতুন চিন্তার স্বাধীনতা দিয়েছিল—যেখানে কেবল কয়েকটি যুক্তিপূর্ণ নির্দেশনার মাধ্যমে বাস্তব সমাধান তৈরি করা সম্ভব।'
-            : 'My journey into computer science began with an innate curiosity about how complex systems operate beneath the surface. Discovering programming was not merely learning syntax; it felt like finding an expressive medium where logic, precision, and human intent converge to build real solutions.'}
-        </p>
-        <p>
-          {locale === 'bn'
-            ? 'বর্তমানে আমি ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটিতে কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং বিভাগে স্নাতক অধ্যয়ন করছি। বিশ্ববিদ্যালয়ের এই সময়টি আমাকে কম্পিউটেশনাল ফান্ডামেন্টালস, অ্যালগরিদম ডিজাইন এবং গাণিতিক ভিত্তি শক্ত করার সুযোগ দিচ্ছে।'
-            : 'Currently, I am pursuing my Bachelor of Science in Computer Science and Engineering at Daffodil International University in Bangladesh. My academic path is deeply rooted in computational foundations, algorithm design, discrete mathematics, and software systems.'}
-        </p>
-      </section>
+    <!-- PROSE ESSAY SECTIONS -->
+    <article class="container-narrow about-narrative">
+      <div class="prose">
+        <section class="about-section">
+          <h2>{locale === 'bn' ? 'যাত্রা শুরু ও কম্পিউটার বিজ্ঞানের আবিষ্কার' : 'The Beginning & The World of Computing'}</h2>
+          <p>
+            {locale === 'bn'
+              ? 'প্রযুক্তির প্রতি আমার আকর্ষণ শুরু হয়েছিল কিভাবে সিস্টেমগুলো অন্তরালে কাজ করে তা বোঝার গভীর কৌতূহল থেকে। কোডিংয়ের সাথে প্রথম পরিচিতি আমাকে একটি নতুন চিন্তার স্বাধীনতা দিয়েছিল—যেখানে কেবল কয়েকটি যুক্তিপূর্ণ নির্দেশনার মাধ্যমে বাস্তব সমাধান তৈরি করা সম্ভব।'
+              : 'My journey into computer science began with an innate curiosity about how complex systems operate beneath the surface. Discovering programming was not merely learning syntax; it felt like finding an expressive medium where logic, precision, and human intent converge to build real solutions.'}
+          </p>
+          <p>
+            {locale === 'bn'
+              ? 'বর্তমানে আমি ড্যাফোডিল ইন্টারন্যাশনাল ইউনিভার্সিটিতে কম্পিউটার সায়েন্স অ্যান্ড ইঞ্জিনিয়ারিং বিভাগে স্নাতক অধ্যয়ন করছি। বিশ্ববিদ্যালয়ের এই সময়টি আমাকে কম্পিউটেশনাল ফান্ডামেন্টালস, অ্যালগরিদম ডিজাইন এবং গাণিতিক ভিত্তি শক্ত করার সুযোগ দিচ্ছে।'
+              : 'Currently, I am pursuing my Bachelor of Science in Computer Science and Engineering at Daffodil International University in Bangladesh. My academic path is deeply rooted in computational foundations, algorithm design, discrete mathematics, and software systems.'}
+          </p>
+        </section>
 
-      <section class="about-section">
-        <h2>{locale === 'bn' ? 'কৃত্রিম বুদ্ধিমত্তা ও গবেষণার প্রতি আগ্রহ' : 'Artificial Intelligence & Scientific Ambition'}</h2>
-        <p>
-          {locale === 'bn'
-            ? 'কৃত্রিম বুদ্ধিমত্তা, মেশিন লার্নিং, ন্যাচারাল ল্যাঙ্গুয়েজ প্রসেসিং (NLP) এবং আধুনিক লার্জ ল্যাঙ্গুয়েজ মডেল (LLM) আমার প্রধান বৌদ্ধিক ক্ষেত্র। ভাষা কিভাবে কম্পিউটারে রূপায়িত হয় এবং মেশিন কিভাবে অনুধাবন ও যুক্তি প্রয়োগ করতে পারে—এই প্রশ্নগুলো আমাকে গভীরভাবে ভাবায়।'
-            : 'Artificial Intelligence, Machine Learning, and particularly Natural Language Processing (NLP) and Large Language Models (LLMs) represent the core focus of my scientific curiosity. The challenge of how machines can represent linguistic nuance, synthesize knowledge, and perform multi-step reasoning fascinates me.'}
-        </p>
-        <p>
-          {locale === 'bn'
-            ? 'আমার দীর্ঘমেয়াদী স্বপ্ন একজন এআই গবেষক হিসেবে অর্থবহ বৈজ্ঞানিক অবদান রাখা এবং পরবর্তীতে বিশ্ববিদ্যালয়ে শিক্ষকতা করে নতুন প্রজন্মের শিক্ষার্থীদের গবেষণামুখী মানসিকতা গড়ে তুলতে সহায়তা করা।'
-            : 'My foremost long-term ambition is to become an AI researcher publishing meaningful scientific contributions, and to teach computer science and artificial intelligence at university, guiding the next generation of computational thinkers.'}
-        </p>
-      </section>
+        <section class="about-section">
+          <h2>{locale === 'bn' ? 'কৃত্রিম বুদ্ধিমত্তা ও গবেষণার প্রতি আগ্রহ' : 'Artificial Intelligence & Scientific Ambition'}</h2>
+          <p>
+            {locale === 'bn'
+              ? 'কৃত্রিম বুদ্ধিমত্তা, মেশিন লার্নিং, ন্যাচারাল ল্যাঙ্গুয়েজ প্রসেসিং (NLP) এবং আধুনিক লার্জ ল্যাঙ্গুয়েজ মডেল (LLM) আমার প্রধান বৌদ্ধিক ক্ষেত্র। ভাষা কিভাবে কম্পিউটারে রূপায়িত হয় এবং মেশিন কিভাবে অনুধাবন ও যুক্তি প্রয়োগ করতে পারে—এই প্রশ্নগুলো আমাকে গভীরভাবে ভাবায়।'
+              : 'Artificial Intelligence, Machine Learning, and particularly Natural Language Processing (NLP) and Large Language Models (LLMs) represent the core focus of my scientific curiosity. The challenge of how machines can represent linguistic nuance, synthesize knowledge, and perform multi-step reasoning fascinates me.'}
+          </p>
+          <p>
+            {locale === 'bn'
+              ? 'আমার দীর্ঘমেয়াদী স্বপ্ন একজন এআই গবেষক হিসেবে অর্থবহ বৈজ্ঞানিক অবদান রাখা এবং পরবর্তীতে বিশ্ববিদ্যালয়ে শিক্ষকতা করে নতুন প্রজন্মের শিক্ষার্থীদের গবেষণামুখী মানসিকতা গড়ে তুলতে সহায়তা করা।'
+              : 'My foremost long-term ambition is to become an AI researcher publishing meaningful scientific contributions, and to teach computer science and artificial intelligence at university, guiding the next generation of computational thinkers.'}
+          </p>
+        </section>
 
-      <section class="about-section">
-        <h2>{locale === 'bn' ? 'সাহিত্য, ভিজ্যুয়াল গল্পবলন ও সিনেমা' : 'Literature, Storytelling & Visual Arts'}</h2>
-        <p>
-          {locale === 'bn'
-            ? 'প্রকৌশলের সমান্তরালে আমার আরেকটি প্রধান জগত হলো সাহিত্য। আমি ছোটগল্প, উপন্যাস, কবিতা এবং মানবিক অনুভূতি ও সামাজিক বাস্তবতা নিয়ে প্রবন্ধ লিখতে ভালোবাসি। সাহিত্য আমাকে মানুষের অন্তর্দ্বন্দ্ব ও গভীর অনুভূতি অনুধাবন করতে শেখায়।'
-            : 'Alongside computational engineering, literature forms the complementary half of my identity. I actively write short stories, work on novel concepts, compose poetry, and write personal reflections. Literature grants me the language to explore human solitude, emotion, and philosophical inquiry.'}
-        </p>
-        <p>
-          {locale === 'bn'
-            ? 'একইসাথে ফটোগ্রাফি ও সিনেমার দৃশ্যভাষার প্রতি আমার তীব্র অনুরাগ রয়েছে। একটি ফ্রেমের ভেতরে আলোছায়া, নাগরিক জীবনের ছন্দ এবং মানুষের অভিব্যক্তি ক্যামেরাবন্দি করা আমার কাছে দৃশ্যমান গল্প রচনার মতো।'
-            : 'Similarly, photography and cinema represent visual storytelling for me. Framing natural light, architectural geometry, and candid human moments through the lens is simply visual fiction written with light instead of words.'}
-        </p>
-      </section>
+        <section class="about-section">
+          <h2>{locale === 'bn' ? 'সাহিত্য, ভিজ্যুয়াল গল্পবলন ও সিনেমা' : 'Literature, Storytelling & Visual Arts'}</h2>
+          <p>
+            {locale === 'bn'
+              ? 'প্রকৌশলের সমান্তরালে আমার আরেকটি প্রধান জগত হলো সাহিত্য। আমি ছোটগল্প, উপন্যাস, কবিতা এবং মানবিক অনুভূতি ও সামাজিক বাস্তবতা নিয়ে প্রবন্ধ লিখতে ভালোবাসি। সাহিত্য আমাকে মানুষের অন্তর্দ্বন্দ্ব ও গভীর অনুভূতি অনুধাবন করতে শেখায়।'
+              : 'Alongside computational engineering, literature forms the complementary half of my identity. I actively write short stories, work on novel concepts, compose poetry, and write personal reflections. Literature grants me the language to explore human solitude, emotion, and philosophical inquiry.'}
+          </p>
+          <p>
+            {locale === 'bn'
+              ? 'একইসাথে ফটোগ্রাফি ও সিনেমার দৃশ্যভাষার প্রতি আমার তীব্র অনুরাগ রয়েছে। একটি ফ্রেমের ভেতরে আলোছায়া, নাগরিক জীবনের ছন্দ এবং মানুষের অভিব্যক্তি ক্যামেরাবন্দি করা আমার কাছে দৃশ্যমান গল্প রচনার মতো।'
+              : 'Similarly, photography and cinema represent visual storytelling for me. Framing natural light, architectural geometry, and candid human moments through the lens is simply visual fiction written with light instead of words.'}
+          </p>
+        </section>
 
-      <section class="about-section">
-        <h2>{locale === 'bn' ? 'নেতৃত্ব ও সিনিটিসফট (SynitySoft)' : 'Leadership & SynitySoft'}</h2>
-        <p>
-          {locale === 'bn'
-            ? 'আমি সিনিটিসফট (SynitySoft)-এর সহ-প্রতিষ্ঠাতা ও বোর্ড পরিচালক। আমরা পরিচ্ছন্ন সফটওয়্যার ইঞ্জিনিয়ারিং এবং নির্ভরযোগ্য প্রযুক্তি পণ্যের মাধ্যমে ইতিবাচক পরিবর্তনের লক্ষ্যে কাজ করছি।'
-            : 'I serve as Co-Founder and Board Director at SynitySoft. We are committed to engineering robust software solutions, modern platform architectures, and fostering an environment of technical integrity.'}
-        </p>
-      </section>
+        <section class="about-section">
+          <h2>{locale === 'bn' ? 'নেতৃত্ব ও সিনিটিসফট (SynitySoft)' : 'Leadership & SynitySoft'}</h2>
+          <p>
+            {locale === 'bn'
+              ? 'আমি সিনিটিসফট (SynitySoft)-এর সহ-প্রতিষ্ঠাতা ও বোর্ড পরিচালক। আমরা পরিচ্ছন্ন সফটওয়্যার ইঞ্জিনিয়ারিং এবং নির্ভরযোগ্য প্রযুক্তি পণ্যের মাধ্যমে ইতিবাচক পরিবর্তনের লক্ষ্যে কাজ করছি।'
+              : 'I serve as Co-Founder and Board Director at SynitySoft. We are committed to engineering robust software solutions, modern platform architectures, and fostering an environment of technical integrity.'}
+          </p>
+        </section>
 
-      <section class="about-section">
-        <h2>{locale === 'bn' ? 'দীর্ঘমেয়াদী লক্ষ্যসমূহ' : 'Long-Term Ambitions'}</h2>
-        <ul class="ambition-list">
-          {profile.ambitions.map((item) => (
-            <li>{item[locale] || item.en}</li>
-          ))}
-        </ul>
-      </section>
+        <section class="about-section">
+          <h2>{locale === 'bn' ? 'দীর্ঘমেয়াদী লক্ষ্যসমূহ' : 'Long-Term Ambitions'}</h2>
+          <ul class="ambition-list">
+            {profile.ambitions.map((item) => (
+              <li>{item[locale] || item.en}</li>
+            ))}
+          </ul>
+        </section>
 
-      <section class="about-section">
-        <h2>{locale === 'bn' ? 'মাইলফলক ও সময়রেখা' : 'Milestones & Timeline'}</h2>
-        <div class="timeline-list">
-          {timeline.map((item) => (
-            <div class="timeline-entry">
-              <span class="timeline-badge">{item.year} · {item.category}</span>
-              <h3 class="timeline-entry-title">{item.title[locale] || item.title.en}</h3>
-              <p>{item.description[locale] || item.description.en}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
-  </article>
+        <section class="about-section">
+          <h2>{locale === 'bn' ? 'মাইলফলক ও সময়রেখা' : 'Milestones & Timeline'}</h2>
+          <div class="timeline-list">
+            {timeline.map((item) => (
+              <div class="timeline-entry">
+                <span class="timeline-badge">{item.year} · {item.category}</span>
+                <h3 class="timeline-entry-title">{item.title[locale] || item.title.en}</h3>
+                <p>{item.description[locale] || item.description.en}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </article>
+  </div>
 </BaseLayout>
 
 <style>
   .about-page {
-    padding: var(--space-16) 0 var(--space-24);
+    padding-bottom: var(--space-24);
   }
 
-  .page-header {
-    margin-bottom: var(--space-12);
+  .about-intro-section {
+    padding: var(--space-16) 0 var(--space-12);
     border-bottom: 1px solid var(--border-light);
-    padding-bottom: var(--space-8);
+    margin-bottom: var(--space-12);
+  }
+
+  .about-intro-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 0.85fr;
+    gap: var(--space-12);
+    align-items: start;
   }
 
   .page-title {
     font-size: var(--text-4xl);
+    line-height: 1.15;
     margin-top: var(--space-2);
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.02em;
+  }
+
+  .editorial-lead {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--accent-primary);
+    margin-bottom: var(--space-6);
+    line-height: 1.5;
+  }
+
+  .about-intro-bio {
+    font-size: var(--text-lg);
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-8);
+  }
+
+  .about-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .meta-pill {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+
+  .meta-value {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .about-portrait-col {
+    display: flex;
+    justify-content: center;
+  }
+
+  .about-portrait-card {
+    width: 100%;
+    max-width: 340px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    margin: 0;
+    transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .about-portrait-card:hover {
+    border-color: var(--accent-primary);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .about-portrait-image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--bg-subtle);
+  }
+
+  .about-portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 18%;
+    display: block;
+    transition: transform var(--transition-slow);
+  }
+
+  .about-portrait-card:hover .about-portrait-img {
+    transform: scale(1.02);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-portrait-card:hover .about-portrait-img {
+      transform: none;
+    }
+  }
+
+  .about-portrait-caption {
+    padding: var(--space-4);
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .about-caption-quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .about-caption-author {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--accent-primary);
+    font-weight: 500;
+  }
+
+  .about-portrait-placeholder {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 4 / 5;
+    background: var(--bg-surface);
+    border: 1px dashed var(--border-medium);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    text-align: center;
+    position: relative;
+  }
+
+  .placeholder-tag {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--accent-subtle);
+    color: var(--accent-text);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+  }
+
+  .placeholder-monogram {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 300;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .placeholder-text {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .placeholder-sub {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    max-width: 220px;
+  }
+
+  .about-narrative {
+    margin-top: var(--space-8);
   }
 
   .about-section {
@@ -173,5 +434,25 @@ const timeline = getTimeline(false);
     font-size: var(--text-xl);
     margin-bottom: var(--space-2);
   }
-</style>
 
+  @media (max-width: 900px) {
+    .about-intro-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+
+    .about-portrait-col {
+      order: -1;
+    }
+
+    .about-portrait-card,
+    .about-portrait-placeholder {
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    .about-meta-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
