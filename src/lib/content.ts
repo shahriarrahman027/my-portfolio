@@ -14,6 +14,7 @@ import type {
 } from '@/types';
 
 const DATA_FILE_PATH = path.resolve(process.cwd(), 'data', 'content.json');
+const TMP_DATA_FILE_PATH = path.resolve('/tmp', 'shahriar-content.json');
 
 // In-memory cache for fast read performance
 let memoryDb: SiteDatabase | null = null;
@@ -21,6 +22,12 @@ let memoryDb: SiteDatabase | null = null;
 function loadDatabase(): SiteDatabase {
   if (memoryDb) return memoryDb;
   try {
+    // If running in a serverless environment (e.g. Vercel) and /tmp has an updated snapshot, load it
+    if (process.env.VERCEL && fs.existsSync(TMP_DATA_FILE_PATH)) {
+      const raw = fs.readFileSync(TMP_DATA_FILE_PATH, 'utf-8');
+      memoryDb = JSON.parse(raw) as SiteDatabase;
+      return memoryDb;
+    }
     if (fs.existsSync(DATA_FILE_PATH)) {
       const raw = fs.readFileSync(DATA_FILE_PATH, 'utf-8');
       memoryDb = JSON.parse(raw) as SiteDatabase;
@@ -57,18 +64,32 @@ function loadDatabase(): SiteDatabase {
 }
 
 export function saveDatabase(db: SiteDatabase): boolean {
+  memoryDb = db;
+  let saved = false;
+
+  // Primary: write to project data directory (local development)
   try {
-    memoryDb = db;
     const dir = path.dirname(DATA_FILE_PATH);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(db, null, 2), 'utf-8');
-    return true;
-  } catch (err) {
-    console.error('Error writing to data/content.json:', err);
-    return false;
+    saved = true;
+  } catch (_err) {
+    // Expected on read-only serverless filesystems (e.g. Vercel functions)
   }
+
+  // Fallback: write to /tmp in serverless environments
+  if (process.env.VERCEL || !saved) {
+    try {
+      fs.writeFileSync(TMP_DATA_FILE_PATH, JSON.stringify(db, null, 2), 'utf-8');
+      saved = true;
+    } catch (tmpErr) {
+      console.error('Error writing to /tmp/shahriar-content.json:', tmpErr);
+    }
+  }
+
+  return saved;
 }
 
 /* ==================== PROFILE ==================== */
@@ -299,6 +320,12 @@ export function saveContactSubmission(sub: Omit<ContactSubmission, 'id' | 'recei
 export function getContactSubmissions(): ContactSubmission[] {
   const db = loadDatabase();
   return db.contactSubmissions || [];
+}
+
+export function deleteContactSubmission(id: string): boolean {
+  const db = loadDatabase();
+  db.contactSubmissions = (db.contactSubmissions || []).filter((s) => s.id !== id);
+  return saveDatabase(db);
 }
 
 /* ==================== SEARCH (PUBLIC SAFE) ==================== */

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { Locale } from '@/types';
 import type { SearchResult } from '@/lib/content';
 

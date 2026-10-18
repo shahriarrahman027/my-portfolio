@@ -36,6 +36,7 @@ import {
   searchContent,
   saveContactSubmission,
   getContactSubmissions,
+  deleteContactSubmission,
   getProfile,
   updateProfile,
 } from '../src/lib/content.ts';
@@ -248,6 +249,10 @@ test('Contact form: submissions are safely recorded and retrieved', () => {
   const found = allSubs.find((s) => s.id === testSub.id);
   assert.ok(found);
   assert.equal(found.email, 'reviewer@academic-lab.org');
+
+  // Clean up test entry
+  deleteContactSubmission(testSub.id);
+  assert.equal(getContactSubmissions().some((s) => s.id === testSub.id), false);
 });
 
 test('Search: handles Bengali and English queries safely without leaking drafts', () => {

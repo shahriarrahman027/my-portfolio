@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import type {
   SiteDatabase,
   Project,
@@ -147,6 +147,20 @@ export function AdminDashboardApp() {
     );
   }
 
+  const handleExportJson = () => {
+    if (!data) return;
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `content-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showNotification('Downloaded content backup JSON');
+  };
+
   return (
     <div className="admin-app">
       {/* Top Bar */}
@@ -159,6 +173,9 @@ export function AdminDashboardApp() {
           <a href="/en" target="_blank" rel="noopener noreferrer" className="topbar-link">
             View Live Site ↗
           </a>
+          <button type="button" onClick={handleExportJson} className="export-btn" title="Download content database JSON for Git backup">
+            Backup JSON 💾
+          </button>
           <button type="button" onClick={handleLogout} className="logout-btn">
             Sign Out
           </button>
@@ -1897,6 +1914,21 @@ export function AdminDashboardApp() {
           cursor: pointer;
         }
         .logout-btn:hover { background: var(--bg-subtle); }
+        .export-btn {
+          background: var(--accent-subtle);
+          border: 1px solid var(--accent-primary);
+          padding: 4px 10px;
+          border-radius: 4px;
+          font-size: 12px;
+          color: var(--accent-text);
+          cursor: pointer;
+          font-weight: 500;
+          transition: all 150ms ease;
+        }
+        .export-btn:hover {
+          background: var(--accent-primary);
+          color: var(--text-inverse);
+        }
         .admin-notification {
           padding: 0.75rem 1.5rem;
           font-size: 13px;

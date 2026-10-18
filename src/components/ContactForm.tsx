@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, type SyntheticEvent } from 'react';
 import type { Locale } from '@/types';
 
 interface Props {
@@ -14,7 +14,7 @@ export function ContactForm({ locale }: Props) {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('loading');
     setErrorMessage('');
