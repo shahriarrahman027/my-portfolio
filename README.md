@@ -109,3 +109,4 @@ npm run build
 All content and media references are stored in `data/content.json` and `public/uploads/`.
 - To back up your entire website, simply commit or export the `data/` and `public/uploads/` folders.
 - Cloud DB Option: If you ever want to connect a free cloud PostgreSQL database (e.g. Supabase), configure `PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`.
+

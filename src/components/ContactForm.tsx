@@ -219,3 +219,4 @@ export function ContactForm({ locale }: Props) {
     </form>
   );
 }
+

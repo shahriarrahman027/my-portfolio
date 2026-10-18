@@ -268,3 +268,4 @@ export function Lightbox({ photos, locale }: Props) {
     </div>
   );
 }
+

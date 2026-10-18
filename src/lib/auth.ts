@@ -71,3 +71,4 @@ export function createSessionCookieHeader(token: string): string {
 export function createLogoutCookieHeader(): string {
   return `${COOKIE_NAME}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax`;
 }
+

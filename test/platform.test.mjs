@@ -259,3 +259,4 @@ test('Search: handles Bengali and English queries safely without leaking drafts'
   const resBn = searchContent('ড্যাফোডিল', 'bn');
   assert.ok(Array.isArray(resBn));
 });
+

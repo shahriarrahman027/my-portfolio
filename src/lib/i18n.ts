@@ -226,3 +226,4 @@ export function getLocalizedPath(currentUrl: URL | string, targetLocale: Locale)
 
   return '/' + segments.join('/') + (url.search || '');
 }
+
