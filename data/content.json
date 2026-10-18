@@ -25,6 +25,7 @@
       "en": "Dhaka, Bangladesh",
       "bn": "ঢাকা, বাংলাদেশ"
     },
+    "portraitUrl": "/images/profile/shahriar-rahman.webp",
     "email": "mdshahriar.contact@gmail.com",
     "githubUsername": "shahriarrahman027",
     "synitysoftRole": {
@@ -124,7 +125,52 @@
   "projects": [],
   "writings": [],
   "blogPosts": [],
-  "photographs": [],
+  "photographs": [
+    {
+      "id": "ph-1792291659176",
+      "title": {
+        "en": "The Boat",
+        "bn": "নৌকা"
+      },
+      "caption": {
+        "en": "Waiting is life. Then perhaps one day the boat will truly reach the shore of the flower grove.",
+        "bn": "অপেক্ষাই জীবন। তার পরে সত্যি একদিন হয়ত কুসুম বনে এসে তরী ঠেকবে।"
+      },
+      "imageUrl": "/uploads/upload-1792291669492-63eb6055.jpg",
+      "altText": "VN_Works_PhotoEdit_20261008_202731",
+      "collection": "Street & Geometry",
+      "tags": [],
+      "camera": "Motorola edge 60 Pro",
+      "lens": "N/A",
+      "location": "SirajGanj, Bangladesh",
+      "published": true,
+      "featured": false,
+      "order": 1,
+      "createdAt": "2026-10-18T02:49:45.492Z"
+    },
+    {
+      "id": "ph-1792291806179",
+      "title": {
+        "en": "Life in River",
+        "bn": "জীবন নদীর কূলে "
+      },
+      "caption": {
+        "en": "The reception of birth here is solemn, uncelebrated, and gloomy.",
+        "bn": "জন্মের অভ্যর্থনা এখানে গম্ভীর, নিরুৎসব, বিষণ্ণ।"
+      },
+      "imageUrl": "/uploads/upload-1792291814825-2ffa42fa.jpg",
+      "altText": "VN_Works_PhotoEdit_20261013_175527",
+      "collection": "Street & Geometry",
+      "tags": [],
+      "camera": "Motorola edge 60 Pro",
+      "lens": "N/A",
+      "location": "SirajGanj, Bangladesh. ",
+      "published": true,
+      "featured": false,
+      "order": 2,
+      "createdAt": "2026-10-18T02:52:49.166Z"
+    }
+  ],
   "readingList": [],
   "timeline": [
     {
