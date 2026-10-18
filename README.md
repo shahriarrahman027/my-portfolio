@@ -97,7 +97,7 @@ npm run build
 3. Click **Add New Project** and select this repository.
 4. Under **Environment Variables**, add:
    - `ADMIN_SECRET`: Your secure custom administrative password.
-   - `GITHUB_USERNAME`: `shahriar-rahman` (or your GitHub handle).
+   - `GITHUB_USERNAME`: `shahriarrahman027` (or your GitHub handle).
 5. Deploy! Vercel automatically detects Astro and the `@astrojs/vercel` serverless adapter.
 6. The site will be live immediately on your free Vercel domain (`*.vercel.app`).
 7. **Custom Domain**: When you purchase `shahriarrahman.com` in the future, simply add it in the Vercel Project Settings under **Domains** — no code changes required!
